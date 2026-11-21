@@ -1,867 +1,1516 @@
-<!--
-  وراقنا — دليل الوراقيات الحكومية (نسخة MVP)
-  الإعداد: 1) أنشئ مشروع Supabase ونفّذ SQL الموجود في "دليل-المحتوى-والنشر.md"
-           2) الصق SB_URL و SB_KEY أدناه في الإعدادات
-           3) ارفع الملف لمستودع GitHub وفعّل Pages
-  لوحة الإدارة: افتح الموقع ثم أضف #admin في نهاية الرابط
--->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>وراقنا — دليل الوراقيات الحكومية</title>
-<meta name="theme-color" content="#0B1F3A">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--navy:#0B1F3A;--gold:#D4AF37;--teal:#00A6A6;--teal-t:#007F7F;--bg:#F3F5F9;--card:#FFFFFF;--tx:#0B1F3A;--mut:#5B6B80;--bd:#E1E6EE;--soft:#EEF3F9;--shadow:0 2px 10px rgba(11,31,58,.07)}
-@media (prefers-color-scheme:dark){:root{--bg:#07142A;--card:#0B1F3A;--tx:#F4F6FA;--mut:#9AA9BD;--bd:#1B3354;--soft:#12294A;--teal-t:#2CC8C8;--shadow:none}}
-html{color-scheme:light dark;scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;min-height:100dvh;background:var(--bg);color:var(--tx);font-family:'Tajawal',system-ui,sans-serif;font-size:16px;line-height:1.7}
-.hd{background:linear-gradient(165deg,#0B1F3A 0%,#12305A 100%);padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 14px;text-align:center;border-bottom:3px solid var(--gold);border-radius:0 0 28px 28px;box-shadow:0 8px 22px rgba(11,31,58,.28)}
-.hd h1{margin:0;color:var(--gold);font-size:26px;font-weight:800;letter-spacing:.5px}
-.hd p{margin:2px 0 0;color:#D6DEEA;font-size:14px}
-.wrap{max-width:640px;margin:0 auto;padding:16px 16px 100px}
-h3{margin:14px 0 8px;font-size:16px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
-label{display:block;font-weight:700;font-size:14px;margin:12px 0 6px}
-textarea,select,input{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:11px 12px;outline:none}
-textarea{min-height:90px;resize:vertical}
-textarea:focus,select:focus,input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,166,166,.18)}
-.btn{width:100%;border:0;border-radius:14px;padding:13px;font:inherit;font-weight:800;font-size:16px;background:linear-gradient(135deg,#E8CB62,#D4AF37);color:var(--navy);cursor:pointer;margin-top:12px;box-shadow:0 4px 12px rgba(212,175,55,.35)}
-.btn.sm{width:auto;padding:8px 14px;font-size:14px;margin:0;box-shadow:none}
-.btn.alt{background:var(--soft);color:var(--tx);border:1px solid var(--bd);box-shadow:none}
-.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.mut{color:var(--mut);font-size:13px}
-.ok{color:var(--teal-t);font-weight:700}
-.warn{color:#b8860b;font-weight:700}
-.status{background:rgba(0,166,166,.12);border:1px solid rgba(0,166,166,.35);border-radius:12px;padding:8px 12px;font-weight:700;font-size:13px;margin-bottom:12px;text-align:center}
-.badge{background:var(--gold);color:var(--navy);font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;white-space:nowrap}
-.badge.red{background:#d33;color:#fff}.badge.tl{background:var(--teal);color:#fff}
-.nav{position:fixed;inset:auto 0 0 0;background:var(--card);border-top:1px solid var(--bd);display:flex;justify-content:center;gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 -4px 16px rgba(11,31,58,.08)}
-.nav button{flex:1;max-width:190px;border:0;background:none;color:var(--mut);font:inherit;font-weight:700;font-size:14px;padding:8px 4px;border-radius:12px;cursor:pointer}
-.nav button.on{color:var(--tx);background:rgba(212,175,55,.22);box-shadow:inset 0 -3px 0 var(--gold)}
-.chip{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:6px 12px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
-.chip.on{background:var(--gold);color:var(--navy);border-color:var(--gold)}
-.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-.pc{cursor:pointer}
-.pc h3{margin:0 0 4px;font-size:16px}
-.hide{display:none}
-.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--navy);color:#fff;border:1px solid var(--gold);padding:10px 18px;border-radius:12px;font-weight:700;z-index:9;font-size:14px;max-width:90vw;text-align:center}
-ol.steps{margin:0;padding-inline-start:22px}
-ol.steps li{margin-bottom:6px}
-.ck{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px dashed var(--bd);cursor:pointer}
-.ck input{width:20px;height:20px;margin-top:2px;accent-color:var(--teal)}
-.ck.done span{text-decoration:line-through;color:var(--mut)}
-.prog{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:8px}
-.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));width:0;transition:.3s}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{border:1px solid var(--bd);padding:6px 8px;text-align:right}
-th{background:var(--navy);color:var(--gold)}
-.hero{background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(0,166,166,.12));border:1px solid var(--gold);border-radius:18px;padding:14px;margin-bottom:12px;font-weight:700}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>وراقنا — دليل المعاملات والخدمات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-soft: #eef3f9;
+      --ink: #0f1f38;
+      --muted: #556782;
+      --primary: #0d47a1;
+      --primary-dark: #082f6b;
+      --primary-soft: #e3efff;
+      --accent: #0f766e;
+      --accent-soft: #e6f4f1;
+      --warn: #b45309;
+      --warn-soft: #fef3c7;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --border: #dbe4f0;
+      --shadow-sm: 0 2px 8px rgba(15, 31, 56, 0.05);
+      --shadow-md: 0 10px 28px rgba(15, 31, 56, 0.09);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Cairo", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    /* Topbar */
+    .topbar {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #fff;
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+    }
+
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #f59e0b;
+    }
+
+    .status-pill.connected .status-dot {
+      background: #34d399;
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 15px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-light {
+      background: #fff;
+      color: var(--primary-dark);
+    }
+
+    .btn-light:hover {
+      background: var(--primary-soft);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-accent:hover {
+      filter: brightness(0.94);
+    }
+
+    .btn-outline {
+      background: var(--surface);
+      color: var(--ink);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover {
+      background: var(--surface-soft);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Hero & Search */
+    .hero {
+      padding: 26px 0 10px;
+    }
+
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .stats-strip {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      text-align: center;
+      min-width: 95px;
+    }
+
+    .stat-num {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--primary);
+      display: block;
+    }
+
+    .stat-lbl {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    @media (max-width: 820px) {
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      font-size: 0.92rem;
+    }
+
+    .input:focus, .select:focus, .textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.12);
+    }
+
+    .textarea {
+      min-height: 105px;
+      resize: vertical;
+    }
+
+    /* Procedures Grid */
+    .section {
+      padding: 18px 0 44px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .results-count {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 16px;
+    }
+
+    .proc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .proc-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: #b7cae6;
+    }
+
+    .badges {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--ink);
+      border: 1px solid var(--border);
+    }
+
+    .badge-cat {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border-color: transparent;
+    }
+
+    .badge-verified {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: transparent;
+    }
+
+    .proc-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .proc-meta {
+      font-size: 0.86rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .proc-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .helpful-btn {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .helpful-btn:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    /* Admin View */
+    .admin-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+      margin-top: 16px;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sub-card {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .sub-card h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--ink);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin: 10px 0 14px;
+    }
+
+    .admin-list-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 13px;
+      margin-bottom: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .admin-list-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .admin-list-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 31, 56, 0.56);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: var(--radius);
+      max-width: 660px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-block {
+      margin-bottom: 16px;
+    }
+
+    .detail-block h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 7px;
+    }
+
+    .detail-list {
+      padding-right: 20px;
+      font-size: 0.92rem;
+    }
+
+    .detail-list li {
+      margin-bottom: 5px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.22s ease;
+      z-index: 80;
+      max-width: 92vw;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .empty-state {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 36px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
-<header class="hd"><h1>📋 وراقنا</h1><p>خلّص وراقك بدون دربكة</p></header>
-<div class="wrap">
-  <div id="status" class="status">⏳ جارٍ تجهيز التطبيق…</div>
-  <div id="app"></div>
-</div>
-<nav class="nav">
-  <button onclick="go('#/')" id="n-home">🏠 الرئيسية</button>
-  <button onclick="go('#/suggest')" id="n-sugg">💬 اقترح</button>
-  <button onclick="go('#/about')" id="n-about">ℹ️ عن التطبيق</button>
-</nav>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script>
-/* ================= الإعدادات — عدّل هنا ================= */
-const SB_URL='https://dklhbeuyhofsuobfzffb.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRrbGhiZXV5aG9mc3VvYmZ6ZmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUyNjEwMzMsImV4cCI6MjExMDgzNzAzM30.SV9kaj6jNK_dxDhWGA3TPd7hYFnqizDgJy6bD1bL9tU';
-const ADMIN_PASS='Ht112233Th';
-/* ======================================================= */
-const SEED=[
- {
-  "id": "passport-new",
-  "t": "استخراج جواز سفر لأول مرة",
-  "c": "الجوازات",
-  "city": "كل ليبيا",
-  "d": [
-   "سجل مدني ساري المفعول",
-   "4 صور شخصية حديثة بخلفية بيضاء",
-   "تعبئة استمارة طلب الجواز",
-   "إيصال دفع الرسم من المصرف المحدد"
-  ],
-  "s": [
-   "تعبئة استمارة الطلب (من مكتب الجوازات أو نموذج مسبق)",
-   "دفع رسم استخراج الجواز في المصرف المعتمد والاحتفاظ بالإيصال",
-   "تقديم الملف في شباك الجوازات وتسليم الإيصال",
-   "البصمة والصورة في الموقع",
-   "الاستلام بعد حوالي 7–14 يوماً بموجب الإيصال"
-  ],
-  "f": "رسم الجواز + رسوم بريد (تحقق من الرسم الحالي ميدانياً)",
-  "o": "إدارة الجوازات والجنسية (أقرب فرع ليك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=جوازات+ليبيا",
-  "v": false
- },
- {
-  "id": "passport-lost",
-  "t": "جواز سفر بدل فاقد أو تالف",
-  "c": "الجوازات",
-  "city": "كل ليبيا",
-  "d": [
-   "بلاغ فقدان من أقرب مركز شرطة (للفاقد فقط)",
-   "سجل مدني ساري المفعول",
-   "4 صور شخصية حديثة",
-   "الجواز التالف إن كان متوفراً"
-  ],
-  "s": [
-   "استخراج بلاغ فقدان من الشرطة",
-   "تعبئة استمارة البدل وتقديم الملف في الجوازات",
-   "دفع رسم البدل",
-   "البصمة والصورة",
-   "الاستلام بعد انتهاء المدة المحددة"
-  ],
-  "f": "رسم بدل الجواز (تحقق ميدانياً)",
-  "o": "إدارة الجوازات والجنسية (أقرب فرع ليك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=جوازات+ليبيا",
-  "v": false
- },
- {
-  "id": "passport-renew",
-  "t": "تجديد جواز سفر منتهي",
-  "c": "الجوازات",
-  "city": "كل ليبيا",
-  "d": [
-   "الجواز القديم (حتى المنتهي)",
-   "سجل مدني ساري",
-   "4 صور شخصية",
-   "إيصال دفع رسم التجديد"
-  ],
-  "s": [
-   "دفع رسم التجديد في المصرف",
-   "تقديم الجواز القديم مع الملف في شباك التجديد",
-   "تثبيت البيانات والبصمة",
-   "تسليم القديم وجمع الإيصال",
-   "استلام الجواز الجديد في الموعد المحدد"
-  ],
-  "f": "رسم التجديد (تحقق ميدانياً)",
-  "o": "إدارة الجوازات والجنسية (أقرب فرع ليك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=جوازات+ليبيا",
-  "v": false
- },
- {
-  "id": "tax-clearance",
-  "t": "براءة ذمة ضريبية (للأفراد)",
-  "c": "الضرائب",
-  "city": "كل ليبيا",
-  "d": [
-   "سجل مدني ساري",
-   "استمارة طلب براءة الذمة",
-   "إيصال سداد أي مستحقات متأخرة إن وجدت"
-  ],
-  "s": [
-   "مراجعة مكتب مصلحة الضرائب التابع لمنطقتك",
-   "تعبئة استمارة الطلب وتقديم السجل المدني",
-   "التأكد من عدم وجود مستحقات مسجلة باسمك",
-   "دفع الرسوم إن وجدت",
-   "استلام براءة الذمة مختومة ورقياً"
-  ],
-  "f": "رسوم براءة الذمة (تختلف حسب الغرض — تحقق)",
-  "o": "مصلحة الضرائب — المكتب التابع لمنطقتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=مصلحة+الضرائب+ليبيا",
-  "v": false
- },
- {
-  "id": "civil-card-lost",
-  "t": "بطاقة السجل المدني – بدل تالف أو مفقود",
-  "c": "السجل المدني",
-  "city": "كل ليبيا",
-  "d": [
-   "بلاغ فقدان (للمفقود) أو البطاقة التالفة",
-   "شهادة ميلاد",
-   "صورتان شخصيتان",
-   "رسم الاستخراج"
-  ],
-  "s": [
-   "استخراج بلاغ فقدان من الشرطة",
-   "مراجعة مكتب السجل المدني بالبلدية",
-   "تعبئة الاستمارة ودفع الرسم",
-   "البصمة والصورة",
-   "استلام البطاقة في الموعد المعلن"
-  ],
-  "f": "رسم بدل البطاقة (تحقق ميدانياً)",
-  "o": "السجل المدني — بلديتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
-  "v": false
- },
- {
-  "id": "family-cert",
-  "t": "استخراج شهادة القيد العائلي",
-  "c": "السجل المدني",
-  "city": "كل ليبيا",
-  "d": [
-   "بطاقة السجل المدني لرب الأسرة",
-   "صورة شخصية"
-  ],
-  "s": [
-   "مراجعة السجل المدني التابع لمنطقتك",
-   "طلب شهادة القيد العائلي من الشباك",
-   "دفع الرسم",
-   "استلام الشهادة (غالباً فوراً أو خلال أيام قليلة)"
-  ],
-  "f": "رسم رمزي (تحقق)",
-  "o": "السجل المدني — بلديتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
-  "v": false
- },
- {
-  "id": "birth-damaged",
-  "t": "شهادة ميلاد – بدل تالف",
-  "c": "السجل المدني",
-  "city": "كل ليبيا",
-  "d": [
-   "الشهادة التالفة (المتبقي منها)",
-   "بطاقة السجل المدني",
-   "رسم الاستخراج"
-  ],
-  "s": [
-   "مراجعة السجل المدني بالبلدية",
-   "تقديم التالفة مع استمارة الطلب",
-   "دفع الرسم",
-   "استلام النسخة الجديدة"
-  ],
-  "f": "رمزي (تحقق)",
-  "o": "السجل المدني — بلديتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
-  "v": false
- },
- {
-  "id": "birth-lost",
-  "t": "شهادة ميلاد – بدل مفقود",
-  "c": "السجل المدني",
-  "city": "كل ليبيا",
-  "d": [
-   "بلاغ فقدان",
-   "بطاقة السجل المدني",
-   "مستند داعم أو شاهدان (حسب الطلب)",
-   "رسم الاستخراج"
-  ],
-  "s": [
-   "استخراج بلاغ فقدان",
-   "مراجعة السجل المدني وتقديم البلاغ",
-   "دفع الرسم",
-   "استلام الشهادة الجديدة"
-  ],
-  "f": "رمزي (تحقق)",
-  "o": "السجل المدني — بلديتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
-  "v": false
- },
- {
-  "id": "death-cert",
-  "t": "شهادة وفاة – بدل تالف أو مفقود",
-  "c": "السجل المدني",
-  "city": "كل ليبيا",
-  "d": [
-   "بلاغ فقدان (للمفقود)",
-   "بطاقة السجل المدني للمتوفى أو لأحد أقاربه",
-   "رسم الاستخراج"
-  ],
-  "s": [
-   "استخراج بلاغ فقدان إن لزم",
-   "مراجعة السجل المدني",
-   "تقديم الطلب ودفع الرسم",
-   "استلام الشهادة"
-  ],
-  "f": "رمزي (تحقق)",
-  "o": "السجل المدني — بلديتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
-  "v": false
- },
- {
-  "id": "data-fix",
-  "t": "تصحيح بيانات في السجل المدني (اسم/تاريخ ميلاد)",
-  "c": "السجل المدني",
-  "city": "كل ليبيا",
-  "d": [
-   "مستندات داعمة (شهادة ميلاد قديمة، سجل عائلي، شهادة مدرسية)",
-   "استمارة طلب التصحيح"
-  ],
-  "s": [
-   "مراجعة السجل المدني بالبلدية",
-   "تقديم المستندات الداعمة التي تثبت الصواب",
-   "تعبئة استمارة التصحيح",
-   "دفع أي رسوم إن وجدت",
-   "متابعة الاعتماد ثم استلام المستند المصحح"
-  ],
-  "f": "حسب نوع التصحيح (تحقق)",
-  "o": "السجل المدني — بلديتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
-  "v": false
- },
- {
-  "id": "license-new",
-  "t": "رخصة قيادة – إصدار جديد",
-  "c": "المرور",
-  "city": "كل ليبيا",
-  "d": [
-   "سجل مدني ساري",
-   "4 صور شخصية",
-   "شهادة فحص طبي (نظر ودم) من مركز معتمد",
-   "تعبئة استمارة الطلب"
-  ],
-  "s": [
-   "إجراء الفحص الطبي في مركز معتمد",
-   "مراجعة دائرة المرور وتقديم الملف",
-   "اجتياز الاختبار النظري أو العملي (حسب الفئة)",
-   "دفع الرسم",
-   "استلام الرخصة"
-  ],
-  "f": "رسم الرخصة + رسوم الفحص الطبي (تحقق)",
-  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
-  "v": false
- },
- {
-  "id": "license-lost",
-  "t": "رخصة قيادة – بدل مفقود أو تالفة",
-  "c": "المرور",
-  "city": "كل ليبيا",
-  "d": [
-   "بلاغ فقدان",
-   "سجل مدني ساري",
-   "صورتان شخصيتان",
-   "رسم البدل"
-  ],
-  "s": [
-   "استخراج بلاغ فقدان من الشرطة",
-   "مراجعة دائرة المرور وتقديم الملف",
-   "دفع رسم البدل",
-   "استلام الرخصة الجديدة"
-  ],
-  "f": "رسم البدل (تحقق)",
-  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
-  "v": false
- },
- {
-  "id": "car-reg-lost",
-  "t": "بدل فاقد لرخصة سير وبطاقة ملكية سيارة",
-  "c": "المرور",
-  "city": "كل ليبيا",
-  "d": [
-   "بلاغ فقدان",
-   "بطاقة السجل المدني لمالك السيارة",
-   "رسم الاستخراج"
-  ],
-  "s": [
-   "بلاغ فقدان من الشرطة",
-   "مراجعة دائرة المرور وإثبات الملكية",
-   "دفع الرسم",
-   "استلام الرخصة والبطاقة الجديدة"
-  ],
-  "f": "رسم البدل (تحقق)",
-  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
-  "v": false
- },
- {
-  "id": "car-transfer",
-  "t": "نقل ملكية سيارة (بيع وشراء)",
-  "c": "المرور",
-  "city": "كل ليبيا",
-  "d": [
-   "رخصة السير وبطاقة الملكية",
-   "سجل مدني ساري للطرفين",
-   "عقد بيع موثق أو منضم",
-   "فحص فني للسيارة"
-  ],
-  "s": [
-   "توثيق عقد البيع",
-   "فحص السيارة فنياً في المركز المعتمد",
-   "مراجعة المرور لنقل الملكية",
-   "دفع الرسوم والضرائب المستحقة",
-   "استلام الرخصة باسم المشتري"
-  ],
-  "f": "رسوم نقل + ضريبة (تحقق من النسبة الحالية)",
-  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
-  "v": false
- },
- {
-  "id": "police-record",
-  "t": "صحيفة السوابق الجنائية (فيش وتشبيه)",
-  "c": "الجهات القضائية",
-  "city": "كل ليبيا",
-  "d": [
-   "سجل مدني ساري",
-   "صورة شخصية",
-   "رسم الاستخراج"
-  ],
-  "s": [
-   "مراجعة الجهة المختصة في مدينتك (النيابة/سجل الأحوال — حسب المدينة)",
-   "تقديم الطلب ودفع الرسم",
-   "استلام الصحيفة غالباً في نفس اليوم"
-  ],
-  "f": "رمزي (تحقق)",
-  "o": "الجهة المختصة – تحقق منها في مدينتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=نيابة+عامة+ليبيا",
-  "v": false
- },
- {
-  "id": "edu-attest",
-  "t": "تصديق شهادة دراسية للعمل بالخارج",
-  "c": "التعليم",
-  "city": "كل ليبيا",
-  "d": [
-   "الشهادة الأصلية",
-   "تصديق أولي من الجهة التعليمية",
-   "جواز سفر ساري",
-   "صور شخصية"
-  ],
-  "s": [
-   "تصديق الشهادة من الوزارة أو الجهة التعليمية المختصة",
-   "التصديق من وزارة الخارجية",
-   "التصديق من سفارة الدولة المقصودة إن طلبت",
-   "استلام الشهادة مصدقة"
-  ],
-  "f": "رسوم التصديق لكل جهة (تحقق)",
-  "o": "وزارة التعليم / وزارة الخارجية",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=وزارة+الخارجية+ليبيا",
-  "v": false
- },
- {
-  "id": "commercial-reg",
-  "t": "القيد في السجل التجاري ورخصة النشاط",
-  "c": "التجاري",
-  "city": "كل ليبيا",
-  "d": [
-   "سجل مدني ساري",
-   "عقد إيجار أو سند ملكية للمحل",
-   "استمارة القيد",
-   "رسم القيد"
-  ],
-  "s": [
-   "مراجعة جهة السجل التجاري / غرفة التجارة",
-   "تعبئة استمارة القيد وإرفاق المستندات",
-   "دفع رسم القيد",
-   "استلام السجل التجاري ورخصة مزاولة النشاط"
-  ],
-  "f": "رسم القيد السنوي (تحقق)",
-  "o": "السجل التجاري (غرفة التجارة بمدينتك)",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+التجاري+ليبيا",
-  "v": false
- },
- {
-  "id": "property-transfer",
-  "t": "تسجيل عقار ونقل ملكيته",
-  "c": "العقار",
-  "city": "كل ليبيا",
-  "d": [
-   "حجة ملكية أو عقد موثق",
-   "سجل مدني ساري للطرفين",
-   "شهادة خلو العقار من الموانع",
-   "رسم نقل الملكية"
-  ],
-  "s": [
-   "إعداد عقد موثق لدى الموثق المختص",
-   "مراجعة السجل العقاري وتقديم الملف",
-   "دفع رسم النقل (نسبة من قيمة العقار)",
-   "قيد النقل في السجل",
-   "استلام الصك الجديد"
-  ],
-  "f": "رسم النقل تقريباً نسبة من قيمة العقار — تختلف حسب نوعه (تحقق)",
-  "o": "السجل العقاري — المكتب التابع لمنطقتك",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=السجل+العقاري+ليبيا",
-  "v": false
- },
- {
-  "id": "building-permit",
-  "t": "رخصة بناء",
-  "c": "البلديات",
-  "city": "كل ليبيا",
-  "d": [
-   "صك ملكية الأرض",
-   "مخطط هندسي معتمد من مهندس مرخص",
-   "بطاقة السجل المدني",
-   "استمارة طلب الرخصة"
-  ],
-  "s": [
-   "تقديم الطلب لقسم التراخيص بالبلدية",
-   "دراسة الملف من قسم التخطيط",
-   "استكمال موافقات الجهات ذات العلاقة إن طلبت",
-   "دفع رسم الرخصة",
-   "استلام رخصة البناء"
-  ],
-  "f": "حسب مساحة البناء (تحقق)",
-  "o": "بلديتك — قسم التراخيص",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=بلدية+طرابلس+المركز+ليبيا",
-  "v": false
- },
- {
-  "id": "power-attorney",
-  "t": "توثيق وكالة (توكيل)",
-  "c": "الجهات القضائية",
-  "city": "كل ليبيا",
-  "d": [
-   "سجل مدني ساري للموكِّل",
-   "حضور الشخص بنفسه",
-   "رسم التوثيق"
-  ],
-  "s": [
-   "مراجعة كاتب العدل/الموثق المختص",
-   "إثبات الشخصية بالسجل المدني",
-   "صياغة نص الوكالة وتحديد الصلاحيات",
-   "دفع الرسم",
-   "استلام النسخة الموثقة"
-  ],
-  "f": "رسم التوثيق حسب نوع الوكالة (تحقق)",
-  "o": "كاتب العدل / الموثق",
-  "ph": "",
-  "m": "https://www.google.com/maps/search/?api=1&query=كاتب+عدل+ليبيا",
-  "v": false
- }
-];
-const CITIES=["كل ليبيا","طرابلس","بنغازي","مصراتة","البيضاء","سبها","إجدابيا","الزاوية","زليتن","الخمس","سرت","طبرق","درنة","مسلاتة","الأبيار","زوارة","أوباري","الكفرة","غات","مرزق"];
-
-function normalizeProc(row, idx=0){
-  const docsArr = Array.isArray(row.docs) ? row.docs : (Array.isArray(row.d) ? row.d : []);
-  const stepsArr = Array.isArray(row.steps) ? row.steps : (Array.isArray(row.s) ? row.s : []);
-  return {
-    id: row.id ?? ('p-' + idx),
-    t: row.title ?? row.t ?? 'معاملة بدون عنوان',
-    c: row.category ?? row.c ?? 'عام',
-    city: row.city ?? 'كل ليبيا',
-    d: docsArr,
-    s: stepsArr,
-    f: row.fees ?? row.f ?? 'تحقق ميدانياً',
-    o: row.office ?? row.o ?? 'الجهة المختصة',
-    ph: row.phone ?? row.ph ?? '',
-    m: row.map_link ?? row.m ?? '',
-    verified: Boolean(row.verified ?? row.v ?? false),
-    verified_at: row.verified_at ?? null,
-    helpful: Number(row.helpful ?? 0)
-  };
-}
-
-const $=s=>document.querySelector(s);
-const esc=s=>(s??'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const norm=s=>(s??'').toString().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').toLowerCase();
-const store={get(k,d){try{const v=localStorage.getItem('waraqna_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){localStorage.setItem('waraqna_'+k,JSON.stringify(v))}};
-let toastT;function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),2600)}
-function setStatus(m){$('#status').textContent=m}
-
-let sb=null,DATA=[],ready=false,curCat='الكل',curQ='',curCity=store.get('city','كل ليبيا');
-
-async function boot(){
-  try{
-    if(SB_URL&&SB_KEY&&window.supabase){
-      try{
-        const cleanUrl=SB_URL.trim().replace(/\/+$/,'').replace(/\/rest\/v1$/i,'');
-        sb=window.supabase.createClient(cleanUrl,SB_KEY.trim());
-        const {data,error}=await sb.from('procedures').select('*').order('category',{ascending:true}).order('title',{ascending:true});
-        if(error)throw error;
-        if(data&&data.length){
-          DATA=data.map((r,i)=>normalizeProc(r,i));
-          setStatus('✅ متصل بقاعدة البيانات');
-        }else{
-          DATA=SEED.map((x,i)=>normalizeProc(x,i));
-          setStatus('⚠️ قاعدة البيانات فاضية — افتح #admin واضغط "تحميل البيانات الأولية"');
-        }
-      }catch(e){
-        console.warn('Supabase boot error:',e);
-        sb=null;
-        DATA=SEED.map((x,i)=>normalizeProc(x,i));
-        setStatus('⚠️ تعذّر الاتصال بقاعدة البيانات — وضع تجريبي (بيانات محلية)');
-      }
-    }else{
-      DATA=SEED.map((x,i)=>normalizeProc(x,i));
-      setStatus('⚠️ وضع تجريبي — أضف مفاتيح Supabase في الكود لتفعيل قاعدة البيانات');
-    }
-  }catch(fatalErr){
-    console.error('Fatal boot error:',fatalErr);
-    DATA=SEED.map((x,i)=>normalizeProc(x,i));
-    setStatus('⚠️ وضع تجريبي (بيانات محلية)');
-  }
-  ready=true;
-  route();
-}
-function go(h){location.hash=h}
-window.addEventListener('hashchange',route);
-
-function route(){
-  if(!ready)return;
-  try{
-    const h=location.hash||'#/';
-    document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
-    if(h.startsWith('#/p/'))viewDetail(decodeURIComponent(h.slice(4)));
-    else if(h==='#/suggest'){$('#n-sugg').classList.add('on');viewSuggest()}
-    else if(h==='#/about'){$('#n-about').classList.add('on');viewAbout()}
-    else if(h==='#admin')viewAdmin();
-    else{$('#n-home').classList.add('on');viewHome()}
-    window.scrollTo(0,0);
-  }catch(err){
-    console.error('Route error:',err);
-    $('#n-home').classList.add('on');
-    viewHome();
-  }
-}
-
-/* ---------- الرئيسية ---------- */
-function viewHome(){
-  const cats=['الكل',...new Set(DATA.map(p=>p.c))];
-  if(!cats.includes(curCat))curCat='الكل';
-  $('#app').innerHTML=`
-  <div class="hero">🔎 اكتب اسم المعاملة أو اختر التصنيف — والمعلومات خطوة بخطوة</div>
-  <label style="margin:0 0 4px">🗺️ مدينتك</label>
-  <select id="citySel" onchange="setCity(this.value)">${CITIES.map(c=>`<option ${c===curCity?'selected':''}>${esc(c)}</option>`).join('')}</select>
-  <input id="q" placeholder="مثال: جواز، براءة ذمة، رخصة قيادة…" value="${esc(curQ)}" oninput="curQ=this.value;renderList()">
-  <div class="seg" id="cats">${cats.map(c=>`<button class="chip ${c===curCat?'on':''}" onclick="curCat='${esc(c)}';renderList();document.querySelectorAll('#cats .chip').forEach(x=>x.classList.toggle('on',x.textContent==='${esc(c)}'))">${esc(c)}</button>`).join('')}</div>
-  <div id="list"></div>`;
-  renderList();
-}
-function setCity(v){curCity=v;store.set('city',v);renderList()}
-function renderList(){
-  const q=norm(curQ);
-  const list=DATA.filter(p=>(curCity==='كل ليبيا'||p.city===curCity||p.city==='كل ليبيا')&&(curCat==='الكل'||p.c===curCat)&&(!q||norm(p.t+' '+p.c+' '+p.o+' '+p.f).includes(q)));
-  $('#list').innerHTML=list.length?list.map(p=>`
-    <div class="card pc" onclick="go('#/p/${encodeURIComponent(p.id)}')">
-      <div class="row"><h3>${esc(p.t)}</h3><span class="badge">${esc(p.c)}</span></div>
-      <div class="row" style="margin-top:6px">
-        <span class="mut">📍 ${esc(p.city)} · ${esc(p.o)}</span>
-        ${p.verified?'<span class="ok">✅ محققة</span>':'<span class="warn">⚠️ قيد التحقق</span>'}
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">و</div>
+        <div>
+          <div class="brand-title">وراقنا</div>
+          <div class="brand-sub">دليل المعاملات والوثائق والخدمات</div>
+        </div>
       </div>
-      <div class="mut" style="margin-top:4px">👍 ${p.helpful||0} · آخر تحديث: ${esc(p.verified_at||'—')}</div>
-    </div>`).join(''):'<div class="card mut" style="text-align:center">ما لقينا معاملة بهالاسم — جرّب كلمة ثانية أو اقترح إضافتها من تبويب "اقترح"</div>';
-}
 
-/* ---------- صفحة المعاملة ---------- */
-function viewDetail(id){
-  const p=DATA.find(x=>String(x.id)===String(id));
-  if(!p){viewHome();return}
-  const checks=store.get('ck',{})[id]||[];
-  $('#app').innerHTML=`
-  <button class="btn sm alt" onclick="history.back()">→ رجوع</button>
-  <div class="card" style="margin-top:10px">
-    <div class="row"><h3 style="margin:0">${esc(p.t)}</h3><span class="badge">${esc(p.c)}</span></div>
-    <div class="mut" style="margin-top:6px">📍 ${esc(p.city)} · ${esc(p.o)}</div>
-    ${p.verified
-      ?`<div class="ok" style="margin-top:8px">✅ معلومات محققة — آخر تحديث: ${esc(p.verified_at||'')}</div>`
-      :`<div class="warn" style="margin-top:8px">⚠️ معلومات أولية قيد التحقق الميداني — تأكد من الرسوم والمتطلبات قبل المراجعة</div>`}
-  </div>
-  <div class="card">
-    <h3>📄 المستندات المطلوبة <span class="mut" id="ckc"></span></h3>
-    ${(p.d||[]).map((d,i)=>`<label class="ck ${checks[i]?'done':''}"><input type="checkbox" ${checks[i]?'checked':''} onchange="togCk('${esc(String(id))}',${i},this.checked)"><span>${esc(d)}</span></label>`).join('')}
-    <div class="prog"><i id="ckp"></i></div>
-  </div>
-  <div class="card">
-    <h3>🪜 الخطوات بالترتيب</h3>
-    <ol class="steps">${(p.s||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
-  </div>
-  <div class="card">
-    <h3>💰 الرسوم</h3><div>${esc(p.f||'—')}</div>
-    <h3>🏢 الدائرة</h3><div>${esc(p.o||'—')}</div>
-    <div class="row" style="margin-top:10px">
-      <a class="btn sm alt" href="${esc(p.m||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((p.o||'')+' '+p.city))}" target="_blank" rel="noopener">📍 الموقع على الخريطة</a>
-      ${p.ph?`<a class="btn sm alt" href="tel:${esc(p.ph)}">📞 ${esc(p.ph)}</a>`:''}
+      <div class="topbar-actions">
+        <div id="connPill" class="status-pill" title="حالة الاتصال بقاعدة البيانات">
+          <span class="status-dot"></span>
+          <span id="connText">جاري التحقق...</span>
+        </div>
+        <button id="homeBtn" class="btn btn-ghost hidden" type="button">الدليل الرئيسي</button>
+        <button id="adminNavBtn" class="btn btn-light" type="button">لوحة الإدارة</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="publicView" class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-top">
+          <div>
+            <h1>دليل المعاملات الحكومية والخدمات بوضوح</h1>
+            <p>تعرّف على المستندات المطلوبة، الخطوات العملية، والرسوم المعلنة قبل التوجه إلى الجهة المختصة.</p>
+          </div>
+          <div class="stats-strip">
+            <div class="stat-box">
+              <span id="totalProcCount" class="stat-num">0</span>
+              <span class="stat-lbl">معاملة متاحة</span>
+            </div>
+            <div class="stat-box">
+              <span id="verifiedProcCount" class="stat-num">0</span>
+              <span class="stat-lbl">محققة ميدانياً</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="filters-grid">
+          <input id="searchInput" class="input" type="search" placeholder="ابحث باسم المعاملة، الجهة، أو مستند..." />
+          <select id="categorySelect" class="select" aria-label="التصنيف">
+            <option value="">كل التصنيفات</option>
+          </select>
+          <select id="citySelect" class="select" aria-label="المدينة">
+            <option value="">كل المدن</option>
+          </select>
+          <button id="resetFiltersBtn" class="btn btn-outline" type="button">إعادة ضبط</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">المعاملات والخدمات</h2>
+        <span id="resultsLabel" class="results-count"></span>
+      </div>
+      <div id="proceduresGrid" class="cards-grid"></div>
+    </section>
+  </main>
+
+  <section id="adminView" class="container hidden">
+    <div class="admin-panel">
+      <div class="admin-header">
+        <div>
+          <h2>لوحة إدارة وراقنا</h2>
+          <p style="color: var(--muted); font-size: 0.9rem;">إدارة المعاملات، مزامنة البيانات الأولية، ومراجعة اقتراحات المستخدمين.</p>
+        </div>
+        <div class="topbar-actions" style="gap: 8px;">
+          <button id="seedBtn" class="btn btn-accent" type="button">⬆️ تحميل البيانات الأولية</button>
+          <button id="exportJsonBtn" class="btn btn-outline" type="button">⬇️ تصدير JSON</button>
+          <button id="backToSiteBtn" class="btn btn-primary" type="button">العودة للموقع</button>
+        </div>
+      </div>
+
+      <div id="adminAuthBox" class="sub-card" style="max-width: 420px; margin: 18px auto;">
+        <h3>تسجيل الدخول للإدارة</h3>
+        <div class="form-group">
+          <label class="form-label" for="adminPassInput">كلمة مرور الإدارة</label>
+          <input id="adminPassInput" class="input" type="password" placeholder="أدخل كلمة المرور" />
+        </div>
+        <button id="adminLoginBtn" class="btn btn-primary" type="button" style="width: 100%;">دخول</button>
+      </div>
+
+      <div id="adminWorkspace" class="admin-grid hidden">
+        <div>
+          <div class="sub-card">
+            <h3 id="formHeading">إضافة معاملة جديدة</h3>
+            <input id="editIdInput" type="hidden" />
+
+            <div class="form-group">
+              <label class="form-label" for="pTitle">اسم المعاملة *</label>
+              <input id="pTitle" class="input" type="text" placeholder="مثال: استخراج شهادة ميلاد" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="pCategory">التصنيف</label>
+                <select id="pCategory" class="select">
+                  <option value="السجل المدني">السجل المدني</option>
+                  <option value="الجوازات">الجوازات</option>
+                  <option value="المرور">المرور</option>
+                  <option value="الضرائب">الضرائب</option>
+                  <option value="البلديات">البلديات</option>
+                  <option value="التوثيق والتعليم">التوثيق والتعليم</option>
+                  <option value="عام">عام</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pCity">المدينة</label>
+                <input id="pCity" class="input" type="text" value="طرابلس" placeholder="مثال: طرابلس، بنغازي، مصراتة" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pDocs">المستندات (سطر لكل مستند)</label>
+              <textarea id="pDocs" class="textarea" placeholder="اكتب كل مستند في سطر مستقل"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pSteps">الخطوات (سطر لكل خطوة)</label>
+              <textarea id="pSteps" class="textarea" placeholder="اكتب كل خطوة في سطر مستقل"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="pFees">الرسوم</label>
+                <input id="pFees" class="input" type="text" placeholder="مثال: 25 دينار أو تحقق ميدانياً" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pOffice">الجهة / المكتب</label>
+                <input id="pOffice" class="input" type="text" placeholder="مثال: مكتب السجل المدني" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="pPhone">رقم الهاتف (اختياري)</label>
+                <input id="pPhone" class="input" type="text" placeholder="مثال: 021-0000000" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pMap">رابط الخرائط (اختياري)</label>
+                <input id="pMap" class="input" type="url" placeholder="https://maps.google.com/..." />
+              </div>
+            </div>
+
+            <label class="check-row">
+              <input id="pVerified" type="checkbox" />
+              <span>معلومات محققة ميدانياً</span>
+            </label>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button id="saveProcBtn" class="btn btn-primary" type="button">حفظ المعاملة</button>
+              <button id="cancelEditBtn" class="btn btn-outline hidden" type="button">إلغاء التعديل</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sub-card">
+            <h3>المعاملات الحالية (<span id="adminProcTotal">0</span>)</h3>
+            <div id="adminProcList"></div>
+          </div>
+
+          <div class="sub-card">
+            <h3>الاقتراحات والتصحيحات (<span id="adminSugTotal">0</span>)</h3>
+            <div id="adminSugList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Procedure Detail Modal -->
+  <div id="detailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div id="modalBadges" class="badges"></div>
+          <h2 id="modalTitle" style="font-size: 1.25rem; font-weight: 800;"></h2>
+        </div>
+        <button id="closeModalBtn" class="btn btn-outline" type="button">إغلاق</button>
+      </div>
+
+      <div id="modalMeta" class="proc-meta" style="margin-bottom: 16px;"></div>
+
+      <div class="detail-block">
+        <h4>المستندات المطلوبة</h4>
+        <ul id="modalDocs" class="detail-list"></ul>
+      </div>
+
+      <div class="detail-block">
+        <h4>خطوات الإنجاز</h4>
+        <ol id="modalSteps" class="detail-list"></ol>
+      </div>
+
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
+        <button id="modalHelpfulBtn" class="btn btn-outline" type="button">👍 مفيد (<span id="modalHelpfulCount">0</span>)</button>
+        <a id="modalMapLink" class="btn btn-primary hidden" target="_blank" rel="noopener noreferrer">فتح الموقع على الخريطة</a>
+      </div>
+
+      <div class="sub-card" style="margin-bottom: 0;">
+        <h3>إرسال اقتراح أو تصحيح لهذه المعاملة</h3>
+        <div class="form-group">
+          <input id="sugName" class="input" type="text" placeholder="اسمك (اختياري)" />
+        </div>
+        <div class="form-group">
+          <textarea id="sugMessage" class="textarea" style="min-height: 75px;" placeholder="اكتب ملاحظتك أو تحديث المستندات/الرسوم..."></textarea>
+        </div>
+        <button id="sendSugBtn" class="btn btn-accent" type="button">إرسال الاقتراح</button>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <button class="btn sm alt" onclick="vote('${esc(String(id))}')">👍 المعلومة مفيدة (${p.helpful||0})</button>
-    <a class="btn sm alt" href="#/suggest" style="text-decoration:none;text-align:center">💬 اقترح تصحيحاً</a>
-  </div>`;
-  updCk(id);
-}
-function togCk(id,i,v){
-  const all=store.get('ck',{});all[id]=all[id]||[];all[id][i]=v;store.set('ck',all);
-  viewDetail(id);
-}
-function updCk(id){
-  const p=DATA.find(x=>String(x.id)===String(id));if(!p)return;
-  const c=(store.get('ck',{})[id]||[]).filter(Boolean).length,n=(p.d||[]).length||1;
-  const e=$('#ckp');if(e)e.style.width=Math.round(c/n*100)+'%';
-  const t=$('#ckc');if(t)t.textContent=`(${c}/${(p.d||[]).length})`;
-}
-async function vote(id){
-  const voted=store.get('votes',[]);
-  if(voted.includes(id)){toast('سجّلنا تقييمك من قبل 🙏');return}
-  const p=DATA.find(x=>String(x.id)===String(id));if(!p)return;
-  p.helpful=(p.helpful||0)+1;
-  if(sb){
-    try{
-      const {data}=await sb.from('procedures').select('helpful').eq('id',p.id).single();
-      if(data){await sb.from('procedures').update({helpful:(data.helpful||0)+1}).eq('id',p.id)}
-    }catch(e){console.warn('Vote sync failed:',e)}
-  }
-  voted.push(id);store.set('votes',voted);
-  toast('شكراً على تقييمك ❤️');viewDetail(id);
-}
 
-/* ---------- اقترح تصحيحاً ---------- */
-function viewSuggest(){
-  const opts=DATA.map(p=>`<option value="${esc(p.t)}">${esc(p.t)}</option>`).join('');
-  $('#app').innerHTML=`
-  <div class="card">
-    <h3>💬 اقترح تصحيحاً أو أضف معاملة</h3>
-    <p class="mut">مساعدتك تصنع الفرق: إذا غيّرت رسوم أو خطوات في دائرة، أخبرنا ونحدّثها للجميع</p>
-    <label>المعاملة</label>
-    <select id="sg-p"><option value="عام">أخرى / ملاحظة عامة</option>${opts}</select>
-    <label>اسمك (اختياري)</label>
-    <input id="sg-n" placeholder="مجهول also fine 😉">
-    <label>الملاحظة أو التصحيح</label>
-    <textarea id="sg-m" placeholder="مثال: رسم براءة الذمة صار كذا في مصلحة ضرائب طرابلس…"></textarea>
-    <button class="btn" onclick="sendSugg()">إرسال</button>
-  </div>`;
-}
-async function sendSugg(){
-  const t=$('#sg-p').value,n=$('#sg-n').value.trim(),m=$('#sg-m').value.trim();
-  if(!m){toast('اكتب الملاحظة أولاً');return}
-  if(sb){
-    const {error}=await sb.from('suggestions').insert({procedure_title:t,name:n,message:m});
-    if(error){toast('تعذّر الإرسال — تحقق من الاتصال');return}
-  }else{
-    const l=store.get('sug',[]);l.push({id:Date.now(),procedure_title:t,name:n,message:m,created_at:new Date().toISOString(),done:false});store.set('sug',l);
-  }
-  toast('وصلنا اقتراحك، شكراً! 🙏');go('#/');
-}
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-/* ---------- عن التطبيق ---------- */
-function viewAbout(){
-  $('#app').innerHTML=`
-  <div class="card">
-    <h3>📋 وراقنا</h3>
-    <p>دليل مبسّط للمعاملات الحكومية في ليبيا: المستندات، الخطوات، الرسوم، وموقع الدائرة — كلها في مكان واحد.</p>
-    <p class="mut">المعلومات قد تتغير — كل معاملة مكتوب عليها تاريخ آخر تحديث، ويمكنك تقييمها أو اقتراح التصحيح من تبويب "اقترح".</p>
-    <p class="mut">يخدم 20 مدينة عبر ليبيا — اختر مدينتك من الرئيسية لعرض البيانات الوطنية أو الخاصة بمدينتك.</p>
-  </div>`;
-}
+  <script>
+    const SB_URL = "https://dklhbeuyhofsuobfzffb.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRrbGhiZXV5aG9mc3VvYmZ6ZmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUyNjEwMzMsImV4cCI6MjExMDgzNzAzM30.SV9kaj6jNK_dxDhWGA3TPd7hYFnqizDgJy6bD1bL9tU";
+    const ADMIN_PASS = "admin123";
+    const LOCAL_KEY = "waraqna_procedures_v1";
 
-/* ---------- لوحة الإدارة ---------- */
-function viewAdmin(){
-  if(sessionStorage.getItem('wa')!=='1'){
-    $('#app').innerHTML=`<div class="card"><h3>🔐 لوحة الإدارة</h3>
-    <label>كلمة السر</label><input type="password" id="pass">
-    <button class="btn" onclick="login()">دخول</button></div>`;
-    return;
-  }
-  $('#app').innerHTML=`
-  <div class="card">
-    <div class="row"><h3 style="margin:0">🛠️ لوحة الإدارة</h3><button class="btn sm alt" onclick="sessionStorage.removeItem('wa');viewAdmin()">خروج</button></div>
-    <div class="row" style="margin-top:10px">
-      <span>المعاملات: <b>${DATA.length}</b></span>
-      <span id="sugg-c">الاقتراحات: …</span>
-      <span>${sb?'🟢 متصل':'🟡 تجريبي'}</span>
-    </div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn sm" onclick="seedBtn()">⬆️ تحميل البيانات الأولية</button>
-      <button class="btn sm alt" onclick="exportJson()">⬇️ تصدير JSON</button>
-    </div>
-  </div>
-  <div class="card" id="sugg-list"><h3>💬 الاقتراحات الواردة</h3><p class="mut">جارٍ التحميل…</p></div>
-  <div class="card">
-    <h3>➕ إضافة / تعديل معاملة</h3>
-    <label>اسم المعاملة</label><input id="ap-t">
-    <label>التصنيف</label><select id="ap-c">${[...new Set(DATA.map(p=>p.c))].map(c=>`<option>${esc(c)}</option>`).join('')}<option>عام</option></select>
-    <label>المدينة</label><select id="ap-city">${CITIES.map(c=>`<option ${c==='طرابلس'?'selected':''}>${esc(c)}</option>`).join('')}</select>
-    <label>المستندات (سطر لكل مستند)</label><textarea id="ap-d" style="min-height:70px"></textarea>
-    <label>الخطوات (سطر لكل خطوة)</label><textarea id="ap-s" style="min-height:70px"></textarea>
-    <label>الرسوم</label><input id="ap-f" placeholder="مثال: 50 دينار (تحقق)">
-    <label>الدائرة</label><input id="ap-o">
-    <label>رقم الهاتف (اختياري)</label><input id="ap-ph">
-    <label>رابط الخرائط (اختياري)</label><input id="ap-m" placeholder="https://maps.google.com/...">
-    <label><input type="checkbox" id="ap-v" style="width:auto"> ✅ معلومات محققة ميدانياً</label>
-    <button class="btn" onclick="addProc()">حفظ المعاملة</button>
-    <p class="mut" style="margin-top:8px">التعديل: اكتب نفس اسم المعاملة والمدينة لتحديثها، أو اختر مدينة مختلفة لإضافة نسخة خاصة بتلك المدينة</p>
-  </div>`;
-  loadSuggList();
-}
-function login(){if($('#pass').value===ADMIN_PASS){sessionStorage.setItem('wa','1');viewAdmin()}else toast('كلمة السر غلط ❌')}
-async function loadSuggList(){
-  let list=[];
-  if(sb){
-    const {data,error}=await sb.from('suggestions').select('*').order('created_at',{ascending:false});
-    list=error?store.get('sug',[]).slice().reverse():(data||[]);
-  }else list=store.get('sug',[]).slice().reverse();
-  $('#sugg-c').textContent='الاقتراحات: '+list.filter(x=>!x.done).length+' جديد';
-  $('#sugg-list').innerHTML='<h3>💬 الاقتراحات الواردة</h3>'+(list.length?`<table><tr><th>المعاملة</th><th>الملاحظة</th><th>الاسم</th><th></th></tr>${list.map(x=>`<tr style="${x.done?'opacity:.45':''}"><td>${esc(x.procedure_title||'عام')}</td><td>${esc(x.message)}</td><td>${esc(x.name||'—')}</td><td><button class="btn sm alt" onclick="suggDone('${esc(String(x.id))}')">تم</button> <button class="btn sm alt" onclick="suggDel('${esc(String(x.id))}')">حذف</button></td></tr>`).join('')}</table>`:'<p class="mut">لا اقتراحات بعد</p>');
-}
-async function seedBtn(){
-  if(!sb){toast('فعّل Supabase أولاً (SB_URL و SB_KEY)');return}
-  let n=0;
-  for(const raw of SEED){
-    const p=normalizeProc(raw);
-    const {data}=await sb.from('procedures').select('id').eq('title',p.t).eq('city',p.city).limit(1);
-    if(data&&data.length)continue;
-    const {error}=await sb.from('procedures').insert({title:p.t,category:p.c,city:p.city,docs:p.d,steps:p.s,fees:p.f,office:p.o,phone:p.ph,map_link:p.m,verified:p.verified,helpful:0});
-    if(!error)n++;
-  }
-  toast(n?`تم رفع ${n} معاملة ✅`:'البيانات موجودة أصلاً — لا شيء جديد');
-  boot();
-}
-function exportJson(){
-  const blob=new Blob([JSON.stringify(DATA,null,1)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='procedures.json';a.click();
-  toast('تم تنزيل النسخة الاحتياطية ⬇️');
-}
-async function addProc(){
-  const t=$('#ap-t').value.trim();if(!t){toast('اكتب اسم المعاملة');return}
-  const city=$('#ap-city').value.trim()||'طرابلس';
-  const docs=$('#ap-d').value.split('\n').map(x=>x.trim()).filter(Boolean);
-  const steps=$('#ap-s').value.split('\n').map(x=>x.trim()).filter(Boolean);
-  const fees=$('#ap-f').value.trim();
-  const office=$('#ap-o').value.trim();
-  const phone=$('#ap-ph').value.trim();
-  const map_link=$('#ap-m').value.trim();
-  const verified=$('#ap-v').checked;
-  const verified_at=verified?new Date().toISOString().slice(0,10):null;
+    const INITIAL_PROCEDURES = [
+      {
+        id: "11111111-1111-4111-8111-111111111001",
+        title: "إصدار جواز سفر لأول مرة",
+        category: "الجوازات",
+        city: "طرابلس",
+        docs: ["سجل مدني ساري المفعول", "صور شخصية حديثة بخلفية بيضاء", "إيصال دفع الرسم المعتمد"],
+        steps: ["تجهيز المستندات ودفع الرسوم", "مراجعة مكتب الجوازات وتسليم الملف", "إتمام البصمة والصورة", "استلام الجواز عند جاهزيته"],
+        fees: "تحقق ميدانياً",
+        office: "مصلحة الجوازات والجنسية",
+        phone: "",
+        map_link: "",
+        verified: true,
+        verified_at: "2026",
+        helpful: 12
+      },
+      {
+        id: "11111111-1111-4111-8111-111111111002",
+        title: "تجديد جواز السفر",
+        category: "الجوازات",
+        city: "بنغازي",
+        docs: ["الجواز السابق", "سجل مدني ساري المفعول", "صور شخصية حديثة", "إيصال دفع الرسم"],
+        steps: ["تقديم الجواز السابق والمستندات", "سداد الرسم المقرر", "إتمام البصمة إذا لزم الأمر", "استلام الجواز الجديد"],
+        fees: "تحقق ميدانياً",
+        office: "مكتب الجوازات",
+        phone: "",
+        map_link: "",
+        verified: false,
+        verified_at: null,
+        helpful: 8
+      },
+      {
+        id: "11111111-1111-4111-8111-111111111003",
+        title: "استخراج شهادة ميلاد",
+        category: "السجل المدني",
+        city: "طرابلس",
+        docs: ["بيانات القيد أو بطاقة السجل المدني", "إيصال الرسم المقرر"],
+        steps: ["مراجعة مكتب السجل المدني", "تقديم بيانات القيد ودفع الرسم", "استلام شهادة الميلاد"],
+        fees: "تحقق ميدانياً",
+        office: "مكتب السجل المدني",
+        phone: "",
+        map_link: "",
+        verified: true,
+        verified_at: "2026",
+        helpful: 15
+      },
+      {
+        id: "11111111-1111-4111-8111-111111111004",
+        title: "استخراج بطاقة السجل المدني",
+        category: "السجل المدني",
+        city: "مصراتة",
+        docs: ["شهادة ميلاد أو قيد عائلي", "صور شخصية", "إيصال الرسم"],
+        steps: ["التوجه إلى مركز السجل المدني", "مطابقة البيانات وإتمام البصمة", "استلام البطاقة بعد الاعتماد"],
+        fees: "تحقق ميدانياً",
+        office: "مصلحة الأحوال المدنية",
+        phone: "",
+        map_link: "",
+        verified: false,
+        verified_at: null,
+        helpful: 6
+      },
+      {
+        id: "11111111-1111-4111-8111-111111111005",
+        title: "إصدار رخصة قيادة",
+        category: "المرور",
+        city: "طرابلس",
+        docs: ["سجل مدني ساري", "شهادة فحص طبي", "صور شخصية", "إيصال الرسوم"],
+        steps: ["إجراء الفحص الطبي المعتمد", "تقديم الملف في إدارة المرور", "اجتياز الاختبار المقرر", "استلام الرخصة"],
+        fees: "تحقق ميدانياً",
+        office: "إدارة المرور والتراخيص",
+        phone: "",
+        map_link: "",
+        verified: false,
+        verified_at: null,
+        helpful: 9
+      },
+      {
+        id: "11111111-1111-4111-8111-111111111006",
+        title: "نقل ملكية مركبة",
+        category: "المرور",
+        city: "بنغازي",
+        docs: ["رخصة السير وملكية المركبة", "عقد بيع أو تفويض موثق", "إثبات هوية الطرفين", "إيصال الرسوم"],
+        steps: ["مطابقة بيانات المركبة والفحص", "تقديم ملف النقل في المرور", "سداد الرسوم المستحقة", "إصدار الملكية باسم المالك الجديد"],
+        fees: "تحقق ميدانياً",
+        office: "قسم التراخيص والمرور",
+        phone: "",
+        map_link: "",
+        verified: false,
+        verified_at: null,
+        helpful: 5
+      },
+      {
+        id: "11111111-1111-4111-8111-111111111007",
+        title: "الحصول على شهادة براءة ذمة ضريبية",
+        category: "الضرائب",
+        city: "طرابلس",
+        docs: ["إثبات هوية أو سجل تجاري", "استمارة الطلب", "إيصال تسوية المستحقات إن وجدت"],
+        steps: ["مراجعة مكتب الضرائب المختص", "تدقيق الملف الضريبي", "تسوية المستحقات إن وجدت", "استلام شهادة براءة الذمة"],
+        fees: "تحقق ميدانياً",
+        office: "مصلحة الضرائب",
+        phone: "",
+        map_link: "",
+        verified: false,
+        verified_at: null,
+        helpful: 4
+      },
+      {
+        id: "11111111-1111-4111-8111-111111111008",
+        title: "إصدار رخصة نشاط تجاري",
+        category: "البلديات",
+        city: "مصراتة",
+        docs: ["سجل تجاري ساري", "عقد إيجار أو سند ملكية للمحل", "إثبات هوية مقدم الطلب", "إيصال الرسوم"],
+        steps: ["تقديم طلب الترخيص للبلدية", "إتمام الكشف والمعاينة الميدانية", "دفع الرسوم المقررة", "استلام الرخصة التجارية"],
+        fees: "تحقق ميدانياً",
+        office: "البلدية — مكتب التراخيص",
+        phone: "",
+        map_link: "",
+        verified: false,
+        verified_at: null,
+        helpful: 7
+      }
+    ];
 
-  const dbItem={title:t,category:$('#ap-c').value,city,docs,steps,fees,office,phone,map_link,verified,verified_at};
-  const localItem=normalizeProc({...dbItem,helpful:0});
+    let sb = null;
+    let isConnected = false;
+    let procedures = [];
+    let suggestions = [];
+    let activeProcedure = null;
+    let isAdminLoggedIn = false;
 
-  if(sb){
-    const {data}=await sb.from('procedures').select('id').eq('title',t).eq('city',city).limit(1);
-    if(data&&data.length){const {error}=await sb.from('procedures').update(dbItem).eq('id',data[0].id);if(error){toast('خطأ في التحديث');return}toast('تم تحديث المعاملة ✅')}
-    else{const {error}=await sb.from('procedures').insert({...dbItem,helpful:0});if(error){toast('خطأ في الحفظ');return}toast('تمت الإضافة ✅')}
-    boot();
-  }else{
-    const i=DATA.findIndex(p=>p.t===t&&p.city===city);
-    if(i>-1)DATA[i]={...DATA[i],...localItem,id:DATA[i].id};else DATA.unshift({id:'x'+Date.now(),...localItem});
-    toast('حُفظت محلياً (وضع تجريبي) — فعّل Supabase للحفظ الدائم');
-    renderList();
-  }
-}
-async function suggDone(id){
-  if(sb){await sb.from('suggestions').update({done:true}).eq('id',id)}
-  else{const l=store.get('sug',[]);const x=l.find(y=>String(y.id)===String(id));if(x)x.done=true;store.set('sug',l)}
-  loadSuggList();toast('تمت الإشارة ✅');
-}
-async function suggDel(id){
-  if(sb){await sb.from('suggestions').delete().eq('id',id)}
-  else{store.set('sug',store.get('sug',[]).filter(y=>String(y.id)!==String(id)))}
-  loadSuggList();toast('حُذف');
-}
+    const el = (id) => document.getElementById(id);
 
-boot();
-</script>
+    function showToast(msg) {
+      const t = el("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+    }
+
+    function sanitizeMapUrl(url) {
+      if (!url) return "";
+      const clean = url.trim().replace(/^\.+[\/]+/, "");
+      if (/^https?:\/\//i.test(clean)) return clean;
+      return "";
+    }
+
+    function normalizeProcedure(row) {
+      return {
+        id: row.id || crypto.randomUUID(),
+        title: row.title || "معاملة بدون عنوان",
+        category: row.category || "عام",
+        city: row.city || "كل ليبيا",
+        docs: Array.isArray(row.docs) ? row.docs : [],
+        steps: Array.isArray(row.steps) ? row.steps : [],
+        fees: row.fees || "تحقق ميدانياً",
+        office: row.office || "الجهة المختصة",
+        phone: row.phone || "",
+        map_link: row.map_link || "",
+        verified: Boolean(row.verified),
+        verified_at: row.verified_at || null,
+        helpful: Number(row.helpful || 0),
+        created_at: row.created_at || new Date().toISOString()
+      };
+    }
+
+    function loadLocalProcedures() {
+      try {
+        const raw = localStorage.getItem(LOCAL_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length) {
+            return parsed.map(normalizeProcedure);
+          }
+        }
+      } catch (_) {}
+      return INITIAL_PROCEDURES.map(normalizeProcedure);
+    }
+
+    function saveLocalProcedures(list) {
+      try {
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(list));
+      } catch (_) {}
+    }
+
+    function setConnectionStatus(connected, labelText) {
+      isConnected = connected;
+      const pill = el("connPill");
+      const txt = el("connText");
+      pill.classList.toggle("connected", connected);
+      txt.textContent = labelText || (connected ? "متصل بقاعدة البيانات" : "وضع تجريبي");
+    }
+
+    async function initSupabaseAndData() {
+      procedures = loadLocalProcedures();
+      renderFilters();
+      renderProcedures();
+      renderAdminLists();
+
+      if (!window.supabase || !SB_URL || !SB_KEY) {
+        setConnectionStatus(false, "وضع تجريبي");
+        return;
+      }
+
+      try {
+        sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const { data, error } = await sb
+          .from("procedures")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        setConnectionStatus(true, "متصل بقاعدة البيانات");
+
+        if (Array.isArray(data) && data.length > 0) {
+          procedures = data.map(normalizeProcedure);
+          saveLocalProcedures(procedures);
+        } else {
+          procedures = loadLocalProcedures();
+        }
+
+        renderFilters();
+        renderProcedures();
+        await fetchSuggestions();
+        renderAdminLists();
+      } catch (err) {
+        console.error("Supabase connection error:", err);
+        setConnectionStatus(false, "وضع تجريبي");
+      }
+    }
+
+    async function fetchSuggestions() {
+      if (!sb || !isConnected) return;
+      try {
+        const { data, error } = await sb
+          .from("suggestions")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (!error && Array.isArray(data)) {
+          suggestions = data;
+        }
+      } catch (_) {}
+    }
+
+    function renderFilters() {
+      const catSel = el("categorySelect");
+      const citySel = el("citySelect");
+      const currentCat = catSel.value;
+      const currentCity = citySel.value;
+
+      const cats = [...new Set(procedures.map((p) => p.category).filter(Boolean))];
+      const cities = [...new Set(procedures.map((p) => p.city).filter(Boolean))];
+
+      catSel.innerHTML = '<option value="">كل التصنيفات</option>' +
+        cats.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+      citySel.innerHTML = '<option value="">كل المدن</option>' +
+        cities.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+
+      if (cats.includes(currentCat)) catSel.value = currentCat;
+      if (cities.includes(currentCity)) citySel.value = currentCity;
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function getFilteredProcedures() {
+      const q = el("searchInput").value.trim().toLowerCase();
+      const cat = el("categorySelect").value;
+      const city = el("citySelect").value;
+
+      return procedures.filter((p) => {
+        if (cat && p.category !== cat) return false;
+        if (city && p.city !== city) return false;
+        if (!q) return true;
+        const hay = [
+          p.title,
+          p.category,
+          p.city,
+          p.office,
+          p.fees,
+          ...(p.docs || []),
+          ...(p.steps || [])
+        ].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    function renderProcedures() {
+      el("totalProcCount").textContent = procedures.length;
+      el("verifiedProcCount").textContent = procedures.filter((p) => p.verified).length;
+
+      const list = getFilteredProcedures();
+      el("resultsLabel").textContent = `عرض ${list.length} من أصل ${procedures.length}`;
+
+      const grid = el("proceduresGrid");
+      if (!list.length) {
+        grid.innerHTML = '<div class="empty-state">لا توجد معاملات مطابقة لبحثك حالياً.</div>';
+        return;
+      }
+
+      grid.innerHTML = list.map((p) => `
+        <article class="proc-card">
+          <div>
+            <div class="badges">
+              <span class="badge badge-cat">${escapeHtml(p.category)}</span>
+              <span class="badge">${escapeHtml(p.city)}</span>
+              ${p.verified ? '<span class="badge badge-verified">✓ محقق ميدانياً</span>' : ""}
+            </div>
+            <h3 class="proc-title">${escapeHtml(p.title)}</h3>
+            <div class="proc-meta">
+              <span>الجهة: ${escapeHtml(p.office)}</span>
+              <span>الرسوم: ${escapeHtml(p.fees)}</span>
+              <span>المستندات: ${(p.docs || []).length} مستندات • الخطوات: ${(p.steps || []).length} خطوات</span>
+            </div>
+          </div>
+          <div class="proc-foot">
+            <button class="helpful-btn" type="button" data-helpful="${escapeHtml(p.id)}">👍 مفيد (${p.helpful || 0})</button>
+            <button class="btn btn-primary" type="button" data-open="${escapeHtml(p.id)}">عرض التفاصيل</button>
+          </div>
+        </article>
+      `).join("");
+
+      grid.querySelectorAll("[data-open]").forEach((btn) => {
+        btn.addEventListener("click", () => openDetailModal(btn.getAttribute("data-open")));
+      });
+
+      grid.querySelectorAll("[data-helpful]").forEach((btn) => {
+        btn.addEventListener("click", () => markHelpful(btn.getAttribute("data-helpful")));
+      });
+    }
+
+    async function markHelpful(id) {
+      const target = procedures.find((p) => p.id === id);
+      if (!target) return;
+      target.helpful = Number(target.helpful || 0) + 1;
+      saveLocalProcedures(procedures);
+      renderProcedures();
+      if (activeProcedure && activeProcedure.id === id) {
+        el("modalHelpfulCount").textContent = target.helpful;
+      }
+
+      if (sb && isConnected) {
+        await sb.from("procedures").update({ helpful: target.helpful }).eq("id", id);
+      }
+    }
+
+    function openDetailModal(id) {
+      const p = procedures.find((item) => item.id === id);
+      if (!p) return;
+      activeProcedure = p;
+
+      el("modalTitle").textContent = p.title;
+      el("modalBadges").innerHTML = `
+        <span class="badge badge-cat">${escapeHtml(p.category)}</span>
+        <span class="badge">${escapeHtml(p.city)}</span>
+        ${p.verified ? '<span class="badge badge-verified">✓ محقق ميدانياً</span>' : ""}
+      `;
+
+      el("modalMeta").innerHTML = `
+        <span><strong>الجهة:</strong> ${escapeHtml(p.office)}</span>
+        <span><strong>الرسوم:</strong> ${escapeHtml(p.fees)}</span>
+        ${p.phone ? `<span><strong>الهاتف:</strong> ${escapeHtml(p.phone)}</span>` : ""}
+      `;
+
+      el("modalDocs").innerHTML = (p.docs || []).length
+        ? p.docs.map((d) => `<li>${escapeHtml(d)}</li>`).join("")
+        : "<li>لا توجد مستندات مسجلة، يرجى التحقق من الجهة المختصة.</li>";
+
+      el("modalSteps").innerHTML = (p.steps || []).length
+        ? p.steps.map((s) => `<li>${escapeHtml(s)}</li>`).join("")
+        : "<li>لا توجد خطوات مسجلة بعد.</li>";
+
+      el("modalHelpfulCount").textContent = p.helpful || 0;
+
+      const safeMap = sanitizeMapUrl(p.map_link);
+      const mapBtn = el("modalMapLink");
+      if (safeMap) {
+        mapBtn.href = safeMap;
+        mapBtn.classList.remove("hidden");
+      } else {
+        mapBtn.classList.add("hidden");
+      }
+
+      el("sugName").value = "";
+      el("sugMessage").value = "";
+      el("detailModal").classList.add("open");
+    }
+
+    function closeDetailModal() {
+      el("detailModal").classList.remove("open");
+      activeProcedure = null;
+    }
+
+    async function submitSuggestion() {
+      if (!activeProcedure) return;
+      const msg = el("sugMessage").value.trim();
+      const name = el("sugName").value.trim();
+      if (!msg) {
+        showToast("يرجى كتابة نص الاقتراح أو التصحيح أولاً.");
+        return;
+      }
+
+      const payload = {
+        procedure_title: activeProcedure.title,
+        name,
+        message: msg,
+        done: false
+      };
+
+      if (sb && isConnected) {
+        const { data, error } = await sb.from("suggestions").insert([payload]).select();
+        if (error) {
+          showToast("تعذر إرسال الاقتراح إلى قاعدة البيانات.");
+          return;
+        }
+        if (data && data[0]) suggestions.unshift(data[0]);
+        renderAdminLists();
+        showToast("تم إرسال اقتراحك بنجاح، شكراً لمساهمتك.");
+      } else {
+        suggestions.unshift({ ...payload, id: crypto.randomUUID(), created_at: new Date().toISOString() });
+        renderAdminLists();
+        showToast("حُفظ الاقتراح مؤقتاً؛ فعّل الاتصال بـ Supabase للإرسال الدائم.");
+      }
+
+      el("sugMessage").value = "";
+    }
+
+    /* Navigation & Admin */
+    function switchRoute(route) {
+      const isAdmin = route === "#admin";
+      el("publicView").classList.toggle("hidden", isAdmin);
+      el("adminView").classList.toggle("hidden", !isAdmin);
+      el("homeBtn").classList.toggle("hidden", !isAdmin);
+      el("adminNavBtn").classList.toggle("hidden", isAdmin);
+      if (location.hash !== (isAdmin ? "#admin" : "")) {
+        history.replaceState(null, "", isAdmin ? "#admin" : location.pathname + location.search);
+      }
+      if (isAdmin && isAdminLoggedIn && sb && isConnected) {
+        fetchSuggestions().then(renderAdminLists);
+      }
+    }
+
+    function handleAdminLogin() {
+      if (el("adminPassInput").value === ADMIN_PASS) {
+        isAdminLoggedIn = true;
+        el("adminAuthBox").classList.add("hidden");
+        el("adminWorkspace").classList.remove("hidden");
+        renderAdminLists();
+        showToast("تم تسجيل الدخول إلى لوحة الإدارة.");
+      } else {
+        showToast("كلمة المرور غير صحيحة.");
+      }
+    }
+
+    function resetProcedureForm() {
+      el("editIdInput").value = "";
+      el("formHeading").textContent = "إضافة معاملة جديدة";
+      el("pTitle").value = "";
+      el("pCategory").value = "السجل المدني";
+      el("pCity").value = "طرابلس";
+      el("pDocs").value = "";
+      el("pSteps").value = "";
+      el("pFees").value = "";
+      el("pOffice").value = "";
+      el("pPhone").value = "";
+      el("pMap").value = "";
+      el("pVerified").checked = false;
+      el("cancelEditBtn").classList.add("hidden");
+    }
+
+    function startEditProcedure(id) {
+      const p = procedures.find((item) => item.id === id);
+      if (!p) return;
+      el("editIdInput").value = p.id;
+      el("formHeading").textContent = "تعديل معاملة: " + p.title;
+      el("pTitle").value = p.title;
+      el("pCategory").value = p.category;
+      el("pCity").value = p.city;
+      el("pDocs").value = (p.docs || []).join("\n");
+      el("pSteps").value = (p.steps || []).join("\n");
+      el("pFees").value = p.fees || "";
+      el("pOffice").value = p.office || "";
+      el("pPhone").value = p.phone || "";
+      el("pMap").value = p.map_link || "";
+      el("pVerified").checked = Boolean(p.verified);
+      el("cancelEditBtn").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function saveProcedure() {
+      const title = el("pTitle").value.trim();
+      if (!title) {
+        showToast("يرجى إدخال اسم المعاملة.");
+        return;
+      }
+
+      const docs = el("pDocs").value.split("\n").map((s) => s.trim()).filter(Boolean);
+      const steps = el("pSteps").value.split("\n").map((s) => s.trim()).filter(Boolean);
+      const editId = el("editIdInput").value;
+      const verified = el("pVerified").checked;
+
+      const record = {
+        title,
+        category: el("pCategory").value || "عام",
+        city: el("pCity").value.trim() || "كل ليبيا",
+        docs,
+        steps,
+        fees: el("pFees").value.trim() || "تحقق ميدانياً",
+        office: el("pOffice").value.trim() || "الجهة المختصة",
+        phone: el("pPhone").value.trim(),
+        map_link: sanitizeMapUrl(el("pMap").value.trim()),
+        verified,
+        verified_at: verified ? new Date().toISOString().slice(0, 10) : null
+      };
+
+      if (sb && isConnected) {
+        if (editId) {
+          const { data, error } = await sb.from("procedures").update(record).eq("id", editId).select();
+          if (error) {
+            showToast("تعذر تحديث المعاملة في قاعدة البيانات.");
+            return;
+          }
+          const updated = normalizeProcedure(data && data[0] ? data[0] : { ...record, id: editId });
+          procedures = procedures.map((p) => (p.id === editId ? updated : p));
+          showToast("تم تحديث المعاملة في قاعدة البيانات.");
+        } else {
+          const { data, error } = await sb.from("procedures").insert([record]).select();
+          if (error) {
+            showToast("تعذر حفظ المعاملة في قاعدة البيانات.");
+            return;
+          }
+          const created = normalizeProcedure(data && data[0] ? data[0] : record);
+          procedures.unshift(created);
+          showToast("تم حفظ المعاملة الجديدة في قاعدة البيانات.");
+        }
+      } else {
+        if (editId) {
+          procedures = procedures.map((p) => (p.id === editId ? normalizeProcedure({ ...p, ...record, id: editId }) : p));
+        } else {
+          procedures.unshift(normalizeProcedure({ ...record, id: crypto.randomUUID(), helpful: 0 }));
+        }
+        showToast("حُفظت محلياً (وضع تجريبي) — فعّل Supabase للحفظ الدائم.");
+      }
+
+      saveLocalProcedures(procedures);
+      renderFilters();
+      renderProcedures();
+      renderAdminLists();
+      resetProcedureForm();
+    }
+
+    async function seedInitialData() {
+      if (!sb || !isConnected) {
+        showToast("فعّل الاتصال بـ Supabase أولاً لرفع البيانات الأولية.");
+        return;
+      }
+
+      const existingTitles = new Set(procedures.map((p) => p.title.trim()));
+      const toInsert = INITIAL_PROCEDURES
+        .filter((item) => !existingTitles.has(item.title.trim()))
+        .map(({ id, ...rest }) => rest);
+
+      if (!toInsert.length) {
+        showToast("البيانات الأولية موجودة مسبقاً في قاعدة البيانات.");
+        return;
+      }
+
+      const { data, error } = await sb.from("procedures").insert(toInsert).select();
+      if (error) {
+        showToast("حدث خطأ أثناء رفع البيانات الأولية.");
+        return;
+      }
+
+      const added = (data || toInsert).map(normalizeProcedure);
+      procedures = [...added, ...procedures];
+      saveLocalProcedures(procedures);
+      renderFilters();
+      renderProcedures();
+      renderAdminLists();
+      showToast(`تم رفع ${added.length} معاملات أولية بنجاح.`);
+    }
+
+    function exportProceduresJson() {
+      const blob = new Blob([JSON.stringify(procedures, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "procedures.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("تم تصدير ملف procedures.json");
+    }
+
+    function renderAdminLists() {
+      el("adminProcTotal").textContent = procedures.length;
+      el("adminSugTotal").textContent = suggestions.length;
+
+      el("adminProcList").innerHTML = procedures.map((p) => `
+        <div class="admin-list-item">
+          <div>
+            <div class="admin-list-title">${escapeHtml(p.title)}</div>
+            <div class="admin-list-sub">${escapeHtml(p.category)} • ${escapeHtml(p.city)}</div>
+          </div>
+          <button class="btn btn-outline" type="button" data-edit="${escapeHtml(p.id)}">تعديل</button>
+        </div>
+      `).join("");
+
+      el("adminProcList").querySelectorAll("[data-edit]").forEach((btn) => {
+        btn.addEventListener("click", () => startEditProcedure(btn.getAttribute("data-edit")));
+      });
+
+      el("adminSugList").innerHTML = suggestions.length
+        ? suggestions.map((s) => `
+          <div class="admin-list-item">
+            <div>
+              <div class="admin-list-title">${escapeHtml(s.procedure_title || "عام")} ${s.name ? `— ${escapeHtml(s.name)}` : ""}</div>
+              <div class="admin-list-sub">${escapeHtml(s.message)}</div>
+            </div>
+          </div>
+        `).join("")
+        : '<div class="admin-list-sub">لا توجد اقتراحات بعد.</div>';
+    }
+
+    /* Events */
+    el("searchInput").addEventListener("input", renderProcedures);
+    el("categorySelect").addEventListener("change", renderProcedures);
+    el("citySelect").addEventListener("change", renderProcedures);
+    el("resetFiltersBtn").addEventListener("click", () => {
+      el("searchInput").value = "";
+      el("categorySelect").value = "";
+      el("citySelect").value = "";
+      renderProcedures();
+    });
+
+    el("adminNavBtn").addEventListener("click", () => switchRoute("#admin"));
+    el("homeBtn").addEventListener("click", () => switchRoute(""));
+    el("backToSiteBtn").addEventListener("click", () => switchRoute(""));
+    window.addEventListener("hashchange", () => switchRoute(location.hash));
+
+    el("adminLoginBtn").addEventListener("click", handleAdminLogin);
+    el("saveProcBtn").addEventListener("click", saveProcedure);
+    el("cancelEditBtn").addEventListener("click", resetProcedureForm);
+    el("seedBtn").addEventListener("click", seedInitialData);
+    el("exportJsonBtn").addEventListener("click", exportProceduresJson);
+
+    el("closeModalBtn").addEventListener("click", closeDetailModal);
+    el("detailModal").addEventListener("click", (e) => {
+      if (e.target === el("detailModal")) closeDetailModal();
+    });
+    el("modalHelpfulBtn").addEventListener("click", () => {
+      if (activeProcedure) markHelpful(activeProcedure.id);
+    });
+    el("sendSugBtn").addEventListener("click", submitSuggestion);
+
+    switchRoute(location.hash);
+    initSupabaseAndData();
+  </script>
 </body>
 </html>
