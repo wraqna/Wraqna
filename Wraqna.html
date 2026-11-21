@@ -1,0 +1,807 @@
+<!--
+  وراقنا — دليل الوراقيات الحكومية (نسخة MVP)
+  الإعداد: 1) أنشئ مشروع Supabase ونفّذ SQL الموجود في "دليل-المحتوى-والنشر.md"
+           2) الصق SB_URL و SB_KEY أدناه في الإعدادات
+           3) ارفع الملف لمستودع GitHub وفعّل Pages
+  لوحة الإدارة: افتح الموقع ثم أضف #admin في نهاية الرابط
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>وراقنا — دليل الوراقيات الحكومية</title>
+<meta name="theme-color" content="#0B1F3A">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B1F3A;--gold:#D4AF37;--teal:#00A6A6;--teal-t:#007F7F;--bg:#F3F5F9;--card:#FFFFFF;--tx:#0B1F3A;--mut:#5B6B80;--bd:#E1E6EE;--soft:#EEF3F9;--shadow:0 2px 10px rgba(11,31,58,.07)}
+@media (prefers-color-scheme:dark){:root{--bg:#07142A;--card:#0B1F3A;--tx:#F4F6FA;--mut:#9AA9BD;--bd:#1B3354;--soft:#12294A;--teal-t:#2CC8C8;--shadow:none}}
+html{color-scheme:light dark;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--tx);font-family:'Tajawal',system-ui,sans-serif;font-size:16px;line-height:1.7}
+.hd{background:linear-gradient(165deg,#0B1F3A 0%,#12305A 100%);padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 14px;text-align:center;border-bottom:3px solid var(--gold);border-radius:0 0 28px 28px;box-shadow:0 8px 22px rgba(11,31,58,.28)}
+.hd h1{margin:0;color:var(--gold);font-size:26px;font-weight:800;letter-spacing:.5px}
+.hd p{margin:2px 0 0;color:#D6DEEA;font-size:14px}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 100px}
+h3{margin:14px 0 8px;font-size:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 6px}
+textarea,select,input{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:11px 12px;outline:none}
+textarea{min-height:90px;resize:vertical}
+textarea:focus,select:focus,input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,166,166,.18)}
+.btn{width:100%;border:0;border-radius:14px;padding:13px;font:inherit;font-weight:800;font-size:16px;background:linear-gradient(135deg,#E8CB62,#D4AF37);color:var(--navy);cursor:pointer;margin-top:12px;box-shadow:0 4px 12px rgba(212,175,55,.35)}
+.btn.sm{width:auto;padding:8px 14px;font-size:14px;margin:0;box-shadow:none}
+.btn.alt{background:var(--soft);color:var(--tx);border:1px solid var(--bd);box-shadow:none}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.mut{color:var(--mut);font-size:13px}
+.ok{color:var(--teal-t);font-weight:700}
+.warn{color:#b8860b;font-weight:700}
+.status{background:rgba(0,166,166,.12);border:1px solid rgba(0,166,166,.35);border-radius:12px;padding:8px 12px;font-weight:700;font-size:13px;margin-bottom:12px;text-align:center}
+.badge{background:var(--gold);color:var(--navy);font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.red{background:#d33;color:#fff}.badge.tl{background:var(--teal);color:#fff}
+.nav{position:fixed;inset:auto 0 0 0;background:var(--card);border-top:1px solid var(--bd);display:flex;justify-content:center;gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 -4px 16px rgba(11,31,58,.08)}
+.nav button{flex:1;max-width:190px;border:0;background:none;color:var(--mut);font:inherit;font-weight:700;font-size:14px;padding:8px 4px;border-radius:12px;cursor:pointer}
+.nav button.on{color:var(--tx);background:rgba(212,175,55,.22);box-shadow:inset 0 -3px 0 var(--gold)}
+.chip{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:6px 12px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.chip.on{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.pc{cursor:pointer}
+.pc h3{margin:0 0 4px;font-size:16px}
+.hide{display:none}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--navy);color:#fff;border:1px solid var(--gold);padding:10px 18px;border-radius:12px;font-weight:700;z-index:9;font-size:14px;max-width:90vw;text-align:center}
+ol.steps{margin:0;padding-inline-start:22px}
+ol.steps li{margin-bottom:6px}
+.ck{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px dashed var(--bd);cursor:pointer}
+.ck input{width:20px;height:20px;margin-top:2px;accent-color:var(--teal)}
+.ck.done span{text-decoration:line-through;color:var(--mut)}
+.prog{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:8px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));width:0;transition:.3s}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid var(--bd);padding:6px 8px;text-align:right}
+th{background:var(--navy);color:var(--gold)}
+.hero{background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(0,166,166,.12));border:1px solid var(--gold);border-radius:18px;padding:14px;margin-bottom:12px;font-weight:700}
+</style>
+</head>
+<body>
+<header class="hd"><h1>📋 وراقنا</h1><p>خلّص وراقك بدون دربكة</p></header>
+<div class="wrap">
+  <div id="status" class="status">⏳ جارٍ تجهيز التطبيق…</div>
+  <div id="app"></div>
+</div>
+<nav class="nav">
+  <button onclick="go('#/')" id="n-home">🏠 الرئيسية</button>
+  <button onclick="go('#/suggest')" id="n-sugg">💬 اقترح</button>
+  <button onclick="go('#/about')" id="n-about">ℹ️ عن التطبيق</button>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ================= الإعدادات — عدّل هنا ================= */
+const SB_URL='';   // ← ضع Project URL من Supabase (Settings ← API)
+const SB_KEY='';   // ← ضع anon public key
+const ADMIN_PASS='1234'; // ← غيّر كلمة سر لوحة الإدارة
+/* ======================================================= */
+const SEED=[
+ {
+  "id": "passport-new",
+  "t": "استخراج جواز سفر لأول مرة",
+  "c": "الجوازات",
+  "city": "كل ليبيا",
+  "d": [
+   "سجل مدني ساري المفعول",
+   "4 صور شخصية حديثة بخلفية بيضاء",
+   "تعبئة استمارة طلب الجواز",
+   "إيصال دفع الرسم من المصرف المحدد"
+  ],
+  "s": [
+   "تعبئة استمارة الطلب (من مكتب الجوازات أو نموذج مسبق)",
+   "دفع رسم استخراج الجواز في المصرف المعتمد والاحتفاظ بالإيصال",
+   "تقديم الملف في شباك الجوازات وتسليم الإيصال",
+   "البصمة والصورة في الموقع",
+   "الاستلام بعد حوالي 7–14 يوماً بموجب الإيصال"
+  ],
+  "f": "رسم الجواز + رسوم بريد (تحقق من الرسم الحالي ميدانياً)",
+  "o": "إدارة الجوازات والجنسية (أقرب فرع ليك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=جوازات+ليبيا",
+  "v": false
+ },
+ {
+  "id": "passport-lost",
+  "t": "جواز سفر بدل فاقد أو تالف",
+  "c": "الجوازات",
+  "city": "كل ليبيا",
+  "d": [
+   "بلاغ فقدان من أقرب مركز شرطة (للفاقد فقط)",
+   "سجل مدني ساري المفعول",
+   "4 صور شخصية حديثة",
+   "الجواز التالف إن كان متوفراً"
+  ],
+  "s": [
+   "استخراج بلاغ فقدان من الشرطة",
+   "تعبئة استمارة البدل وتقديم الملف في الجوازات",
+   "دفع رسم البدل",
+   "البصمة والصورة",
+   "الاستلام بعد انتهاء المدة المحددة"
+  ],
+  "f": "رسم بدل الجواز (تحقق ميدانياً)",
+  "o": "إدارة الجوازات والجنسية (أقرب فرع ليك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=جوازات+ليبيا",
+  "v": false
+ },
+ {
+  "id": "passport-renew",
+  "t": "تجديد جواز سفر منتهي",
+  "c": "الجوازات",
+  "city": "كل ليبيا",
+  "d": [
+   "الجواز القديم (حتى المنتهي)",
+   "سجل مدني ساري",
+   "4 صور شخصية",
+   "إيصال دفع رسم التجديد"
+  ],
+  "s": [
+   "دفع رسم التجديد في المصرف",
+   "تقديم الجواز القديم مع الملف في شباك التجديد",
+   "تثبيت البيانات والبصمة",
+   "تسليم القديم وجمع الإيصال",
+   "استلام الجواز الجديد في الموعد المحدد"
+  ],
+  "f": "رسم التجديد (تحقق ميدانياً)",
+  "o": "إدارة الجوازات والجنسية (أقرب فرع ليك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=جوازات+ليبيا",
+  "v": false
+ },
+ {
+  "id": "tax-clearance",
+  "t": "براءة ذمة ضريبية (للأفراد)",
+  "c": "الضرائب",
+  "city": "كل ليبيا",
+  "d": [
+   "سجل مدني ساري",
+   "استمارة طلب براءة الذمة",
+   "إيصال سداد أي مستحقات متأخرة إن وجدت"
+  ],
+  "s": [
+   "مراجعة مكتب مصلحة الضرائب التابع لمنطقتك",
+   "تعبئة استمارة الطلب وتقديم السجل المدني",
+   "التأكد من عدم وجود مستحقات مسجلة باسمك",
+   "دفع الرسوم إن وجدت",
+   "استلام براءة الذمة مختومة ورقياً"
+  ],
+  "f": "رسوم براءة الذمة (تختلف حسب الغرض — تحقق)",
+  "o": "مصلحة الضرائب — المكتب التابع لمنطقتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=مصلحة+الضرائب+ليبيا",
+  "v": false
+ },
+ {
+  "id": "civil-card-lost",
+  "t": "بطاقة السجل المدني – بدل تالف أو مفقود",
+  "c": "السجل المدني",
+  "city": "كل ليبيا",
+  "d": [
+   "بلاغ فقدان (للمفقود) أو البطاقة التالفة",
+   "شهادة ميلاد",
+   "صورتان شخصيتان",
+   "رسم الاستخراج"
+  ],
+  "s": [
+   "استخراج بلاغ فقدان من الشرطة",
+   "مراجعة مكتب السجل المدني بالبلدية",
+   "تعبئة الاستمارة ودفع الرسم",
+   "البصمة والصورة",
+   "استلام البطاقة في الموعد المعلن"
+  ],
+  "f": "رسم بدل البطاقة (تحقق ميدانياً)",
+  "o": "السجل المدني — بلديتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
+  "v": false
+ },
+ {
+  "id": "family-cert",
+  "t": "استخراج شهادة القيد العائلي",
+  "c": "السجل المدني",
+  "city": "كل ليبيا",
+  "d": [
+   "بطاقة السجل المدني لرب الأسرة",
+   "صورة شخصية"
+  ],
+  "s": [
+   "مراجعة السجل المدني التابع لمنطقتك",
+   "طلب شهادة القيد العائلي من الشباك",
+   "دفع الرسم",
+   "استلام الشهادة (غالباً فوراً أو خلال أيام قليلة)"
+  ],
+  "f": "رسم رمزي (تحقق)",
+  "o": "السجل المدني — بلديتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
+  "v": false
+ },
+ {
+  "id": "birth-damaged",
+  "t": "شهادة ميلاد – بدل تالف",
+  "c": "السجل المدني",
+  "city": "كل ليبيا",
+  "d": [
+   "الشهادة التالفة (المتبقي منها)",
+   "بطاقة السجل المدني",
+   "رسم الاستخراج"
+  ],
+  "s": [
+   "مراجعة السجل المدني بالبلدية",
+   "تقديم التالفة مع استمارة الطلب",
+   "دفع الرسم",
+   "استلام النسخة الجديدة"
+  ],
+  "f": "رمزي (تحقق)",
+  "o": "السجل المدني — بلديتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
+  "v": false
+ },
+ {
+  "id": "birth-lost",
+  "t": "شهادة ميلاد – بدل مفقود",
+  "c": "السجل المدني",
+  "city": "كل ليبيا",
+  "d": [
+   "بلاغ فقدان",
+   "بطاقة السجل المدني",
+   "مستند داعم أو شاهدان (حسب الطلب)",
+   "رسم الاستخراج"
+  ],
+  "s": [
+   "استخراج بلاغ فقدان",
+   "مراجعة السجل المدني وتقديم البلاغ",
+   "دفع الرسم",
+   "استلام الشهادة الجديدة"
+  ],
+  "f": "رمزي (تحقق)",
+  "o": "السجل المدني — بلديتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
+  "v": false
+ },
+ {
+  "id": "death-cert",
+  "t": "شهادة وفاة – بدل تالف أو مفقود",
+  "c": "السجل المدني",
+  "city": "كل ليبيا",
+  "d": [
+   "بلاغ فقدان (للمفقود)",
+   "بطاقة السجل المدني للمتوفى أو لأحد أقاربه",
+   "رسم الاستخراج"
+  ],
+  "s": [
+   "استخراج بلاغ فقدان إن لزم",
+   "مراجعة السجل المدني",
+   "تقديم الطلب ودفع الرسم",
+   "استلام الشهادة"
+  ],
+  "f": "رمزي (تحقق)",
+  "o": "السجل المدني — بلديتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
+  "v": false
+ },
+ {
+  "id": "data-fix",
+  "t": "تصحيح بيانات في السجل المدني (اسم/تاريخ ميلاد)",
+  "c": "السجل المدني",
+  "city": "كل ليبيا",
+  "d": [
+   "مستندات داعمة (شهادة ميلاد قديمة، سجل عائلي، شهادة مدرسية)",
+   "استمارة طلب التصحيح"
+  ],
+  "s": [
+   "مراجعة السجل المدني بالبلدية",
+   "تقديم المستندات الداعمة التي تثبت الصواب",
+   "تعبئة استمارة التصحيح",
+   "دفع أي رسوم إن وجدت",
+   "متابعة الاعتماد ثم استلام المستند المصحح"
+  ],
+  "f": "حسب نوع التصحيح (تحقق)",
+  "o": "السجل المدني — بلديتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+المدني+ليبيا",
+  "v": false
+ },
+ {
+  "id": "license-new",
+  "t": "رخصة قيادة – إصدار جديد",
+  "c": "المرور",
+  "city": "كل ليبيا",
+  "d": [
+   "سجل مدني ساري",
+   "4 صور شخصية",
+   "شهادة فحص طبي (نظر ودم) من مركز معتمد",
+   "تعبئة استمارة الطلب"
+  ],
+  "s": [
+   "إجراء الفحص الطبي في مركز معتمد",
+   "مراجعة دائرة المرور وتقديم الملف",
+   "اجتياز الاختبار النظري أو العملي (حسب الفئة)",
+   "دفع الرسم",
+   "استلام الرخصة"
+  ],
+  "f": "رسم الرخصة + رسوم الفحص الطبي (تحقق)",
+  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
+  "v": false
+ },
+ {
+  "id": "license-lost",
+  "t": "رخصة قيادة – بدل مفقود أو تالفة",
+  "c": "المرور",
+  "city": "كل ليبيا",
+  "d": [
+   "بلاغ فقدان",
+   "سجل مدني ساري",
+   "صورتان شخصيتان",
+   "رسم البدل"
+  ],
+  "s": [
+   "استخراج بلاغ فقدان من الشرطة",
+   "مراجعة دائرة المرور وتقديم الملف",
+   "دفع رسم البدل",
+   "استلام الرخصة الجديدة"
+  ],
+  "f": "رسم البدل (تحقق)",
+  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
+  "v": false
+ },
+ {
+  "id": "car-reg-lost",
+  "t": "بدل فاقد لرخصة سير وبطاقة ملكية سيارة",
+  "c": "المرور",
+  "city": "كل ليبيا",
+  "d": [
+   "بلاغ فقدان",
+   "بطاقة السجل المدني لمالك السيارة",
+   "رسم الاستخراج"
+  ],
+  "s": [
+   "بلاغ فقدان من الشرطة",
+   "مراجعة دائرة المرور وإثبات الملكية",
+   "دفع الرسم",
+   "استلام الرخصة والبطاقة الجديدة"
+  ],
+  "f": "رسم البدل (تحقق)",
+  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
+  "v": false
+ },
+ {
+  "id": "car-transfer",
+  "t": "نقل ملكية سيارة (بيع وشراء)",
+  "c": "المرور",
+  "city": "كل ليبيا",
+  "d": [
+   "رخصة السير وبطاقة الملكية",
+   "سجل مدني ساري للطرفين",
+   "عقد بيع موثق أو منضم",
+   "فحص فني للسيارة"
+  ],
+  "s": [
+   "توثيق عقد البيع",
+   "فحص السيارة فنياً في المركز المعتمد",
+   "مراجعة المرور لنقل الملكية",
+   "دفع الرسوم والضرائب المستحقة",
+   "استلام الرخصة باسم المشتري"
+  ],
+  "f": "رسوم نقل + ضريبة (تحقق من النسبة الحالية)",
+  "o": "إدارة المرور والتراخيص (أقرب إدارة ليك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=إدارة+المرور+ليبيا",
+  "v": false
+ },
+ {
+  "id": "police-record",
+  "t": "صحيفة السوابق الجنائية (فيش وتشبيه)",
+  "c": "الجهات القضائية",
+  "city": "كل ليبيا",
+  "d": [
+   "سجل مدني ساري",
+   "صورة شخصية",
+   "رسم الاستخراج"
+  ],
+  "s": [
+   "مراجعة الجهة المختصة في مدينتك (النيابة/سجل الأحوال — حسب المدينة)",
+   "تقديم الطلب ودفع الرسم",
+   "استلام الصحيفة غالباً في نفس اليوم"
+  ],
+  "f": "رمزي (تحقق)",
+  "o": "الجهة المختصة – تحقق منها في مدينتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=نيابة+عامة+ليبيا",
+  "v": false
+ },
+ {
+  "id": "edu-attest",
+  "t": "تصديق شهادة دراسية للعمل بالخارج",
+  "c": "التعليم",
+  "city": "كل ليبيا",
+  "d": [
+   "الشهادة الأصلية",
+   "تصديق أولي من الجهة التعليمية",
+   "جواز سفر ساري",
+   "صور شخصية"
+  ],
+  "s": [
+   "تصديق الشهادة من الوزارة أو الجهة التعليمية المختصة",
+   "التصديق من وزارة الخارجية",
+   "التصديق من سفارة الدولة المقصودة إن طلبت",
+   "استلام الشهادة مصدقة"
+  ],
+  "f": "رسوم التصديق لكل جهة (تحقق)",
+  "o": "وزارة التعليم / وزارة الخارجية",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=وزارة+الخارجية+ليبيا",
+  "v": false
+ },
+ {
+  "id": "commercial-reg",
+  "t": "القيد في السجل التجاري ورخصة النشاط",
+  "c": "التجاري",
+  "city": "كل ليبيا",
+  "d": [
+   "سجل مدني ساري",
+   "عقد إيجار أو سند ملكية للمحل",
+   "استمارة القيد",
+   "رسم القيد"
+  ],
+  "s": [
+   "مراجعة جهة السجل التجاري / غرفة التجارة",
+   "تعبئة استمارة القيد وإرفاق المستندات",
+   "دفع رسم القيد",
+   "استلام السجل التجاري ورخصة مزاولة النشاط"
+  ],
+  "f": "رسم القيد السنوي (تحقق)",
+  "o": "السجل التجاري (غرفة التجارة بمدينتك)",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+التجاري+ليبيا",
+  "v": false
+ },
+ {
+  "id": "property-transfer",
+  "t": "تسجيل عقار ونقل ملكيته",
+  "c": "العقار",
+  "city": "كل ليبيا",
+  "d": [
+   "حجة ملكية أو عقد موثق",
+   "سجل مدني ساري للطرفين",
+   "شهادة خلو العقار من الموانع",
+   "رسم نقل الملكية"
+  ],
+  "s": [
+   "إعداد عقد موثق لدى الموثق المختص",
+   "مراجعة السجل العقاري وتقديم الملف",
+   "دفع رسم النقل (نسبة من قيمة العقار)",
+   "قيد النقل في السجل",
+   "استلام الصك الجديد"
+  ],
+  "f": "رسم النقل تقريباً نسبة من قيمة العقار — تختلف حسب نوعه (تحقق)",
+  "o": "السجل العقاري — المكتب التابع لمنطقتك",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=السجل+العقاري+ليبيا",
+  "v": false
+ },
+ {
+  "id": "building-permit",
+  "t": "رخصة بناء",
+  "c": "البلديات",
+  "city": "كل ليبيا",
+  "d": [
+   "صك ملكية الأرض",
+   "مخطط هندسي معتمد من مهندس مرخص",
+   "بطاقة السجل المدني",
+   "استمارة طلب الرخصة"
+  ],
+  "s": [
+   "تقديم الطلب لقسم التراخيص بالبلدية",
+   "دراسة الملف من قسم التخطيط",
+   "استكمال موافقات الجهات ذات العلاقة إن طلبت",
+   "دفع رسم الرخصة",
+   "استلام رخصة البناء"
+  ],
+  "f": "حسب مساحة البناء (تحقق)",
+  "o": "بلديتك — قسم التراخيص",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=بلدية+طرابلس+المركز+ليبيا",
+  "v": false
+ },
+ {
+  "id": "power-attorney",
+  "t": "توثيق وكالة (توكيل)",
+  "c": "الجهات القضائية",
+  "city": "كل ليبيا",
+  "d": [
+   "سجل مدني ساري للموكِّل",
+   "حضور الشخص بنفسه",
+   "رسم التوثيق"
+  ],
+  "s": [
+   "مراجعة كاتب العدل/الموثق المختص",
+   "إثبات الشخصية بالسجل المدني",
+   "صياغة نص الوكالة وتحديد الصلاحيات",
+   "دفع الرسم",
+   "استلام النسخة الموثقة"
+  ],
+  "f": "رسم التوثيق حسب نوع الوكالة (تحقق)",
+  "o": "كاتب العدل / الموثق",
+  "ph": "",
+  "m": "https://www.google.com/maps/search/?api=1&query=كاتب+عدل+ليبيا",
+  "v": false
+ }
+];
+const CITIES=["كل ليبيا","طرابلس","بنغازي","مصراتة","البيضاء","سبها","إجدابيا","الزاوية","زليتن","الخمس","سرت","طبرق","درنة","مسلاتة","الأبيار","زوارة","أوباري","الكفرة","غات","مرزق"];
+
+const $=s=>document.querySelector(s);
+const esc=s=>(s??'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const norm=s=>(s??'').toString().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').toLowerCase();
+const store={get(k,d){try{const v=localStorage.getItem('waraqna_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){localStorage.setItem('waraqna_'+k,JSON.stringify(v))}};
+let toastT;function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),2600)}
+function setStatus(m){$('#status').textContent=m}
+
+let sb=null,DATA=[],ready=false,curCat='الكل',curQ='',curCity=store.get('city','كل ليبيا');
+
+async function boot(){
+  if(SB_URL&&SB_KEY&&window.supabase){
+    try{
+      sb=window.supabase.createClient(SB_URL,SB_KEY);
+      const {data,error}=await sb.from('procedures').select('*').order('category').order('title');
+      if(error)throw error;
+      if(data&&data.length){DATA=data}
+      else{DATA=SEED.map(x=>({...x}));setStatus('⚠️ قاعدة البيانات فاضية — افتح #admin واضغط "تحميل البيانات الأولية"')}
+      setStatus('✅ متصل بقاعدة البيانات');
+    }catch(e){console.warn(e);DATA=SEED.map(x=>({...x}));setStatus('⚠️ تعذّر الاتصال بقاعدة البيانات — وضع تجريبي (بيانات محلية)')}
+  }else{
+    DATA=SEED.map(x=>({...x}));
+    setStatus('⚠️ وضع تجريبي — أضف مفاتيح Supabase في الكود لتفعيل قاعدة البيانات');
+  }
+  ready=true;route();
+}
+function go(h){location.hash=h}
+window.addEventListener('hashchange',route);
+
+function route(){
+  if(!ready)return;
+  const h=location.hash||'#/';
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
+  if(h.startsWith('#/p/'))viewDetail(h.slice(4));
+  else if(h==='#/suggest'){$('#n-sugg').classList.add('on');viewSuggest()}
+  else if(h==='#/about'){$('#n-about').classList.add('on');viewAbout()}
+  else if(h==='#admin')viewAdmin();
+  else{$('#n-home').classList.add('on');viewHome()}
+  window.scrollTo(0,0);
+}
+
+/* ---------- الرئيسية ---------- */
+function viewHome(){
+  const cats=['الكل',...new Set(DATA.map(p=>p.c))];
+  $('#app').innerHTML=`
+  <div class="hero">🔎 اكتب اسم المعاملة أو اختر التصنيف — والمعلومات خطوة بخطوة</div>
+  <label style="margin:0 0 4px">🗺️ مدينتك</label>
+  <select id="citySel" onchange="setCity(this.value)">${CITIES.map(c=>`<option ${c===curCity?'selected':''}>${esc(c)}</option>`).join('')}</select>
+  <input id="q" placeholder="مثال: جواز، براءة ذمة، رخصة قيادة…" value="${esc(curQ)}" oninput="curQ=this.value;renderList()">
+  <div class="seg" id="cats">${cats.map(c=>`<button class="chip ${c===curCat?'on':''}" onclick="curCat='${esc(c)}';renderList();document.querySelectorAll('#cats .chip').forEach(x=>x.classList.toggle('on',x.textContent==='${esc(c)}'))">${esc(c)}</button>`).join('')}</div>
+  <div id="list"></div>`;
+  renderList();
+}
+function setCity(v){curCity=v;store.set('city',v);renderList()}
+function renderList(){
+  const q=norm(curQ);
+  const list=DATA.filter(p=>(curCity==='كل ليبيا'||p.city===curCity||p.city==='كل ليبيا')&&(curCat==='الكل'||p.c===curCat)&&(!q||norm(p.t+' '+p.c+' '+p.o).includes(q)));
+  $('#list').innerHTML=list.length?list.map(p=>`
+    <div class="card pc" onclick="go('#/p/${p.id}')">
+      <div class="row"><h3>${esc(p.t)}</h3><span class="badge">${esc(p.c)}</span></div>
+      <div class="row" style="margin-top:6px">
+        <span class="mut">📍 ${esc(p.city)} · ${esc(p.o)}</span>
+        ${p.verified?'<span class="ok">✅ محققة</span>':'<span class="warn">⚠️ قيد التحقق</span>'}
+      </div>
+      <div class="mut" style="margin-top:4px">👍 ${p.helpful||0} · آخر تحديث: ${p.verified_at||'—'}</div>
+    </div>`).join(''):'<div class="card mut" style="text-align:center">ما لقينا معاملة بهالاسم — جرّب كلمة ثانية أو اقترح إضافتها من تبويب "اقترح"</div>';
+}
+
+/* ---------- صفحة المعاملة ---------- */
+function viewDetail(id){
+  const p=DATA.find(x=>String(x.id)===String(id));
+  if(!p){viewHome();return}
+  const checks=store.get('ck',{})[id]||[];
+  const done=checks.filter(Boolean).length;
+  $('#app').innerHTML=`
+  <button class="btn sm alt" onclick="history.back()">→ رجوع</button>
+  <div class="card" style="margin-top:10px">
+    <div class="row"><h3 style="margin:0">${esc(p.t)}</h3><span class="badge">${esc(p.c)}</span></div>
+    <div class="mut" style="margin-top:6px">📍 ${esc(p.city)} · ${esc(p.o)}</div>
+    ${p.verified
+      ?`<div class="ok" style="margin-top:8px">✅ معلومات محققة — آخر تحديث: ${esc(p.verified_at||'')}</div>`
+      :`<div class="warn" style="margin-top:8px">⚠️ معلومات أولية قيد التحقق الميداني — تأكد من الرسوم والمتطلبات قبل المراجعة</div>`}
+  </div>
+  <div class="card">
+    <h3>📄 المستندات المطلوبة <span class="mut" id="ckc"></span></h3>
+    ${(p.docs||[]).map((d,i)=>`<label class="ck ${checks[i]?'done':''}"><input type="checkbox" ${checks[i]?'checked':''} onchange="togCk('${esc(id)}',${i},this.checked)"><span>${esc(d)}</span></label>`).join('')}
+    <div class="prog"><i id="ckp"></i></div>
+  </div>
+  <div class="card">
+    <h3>🪜 الخطوات بالترتيب</h3>
+    <ol class="steps">${(p.steps||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
+  </div>
+  <div class="card">
+    <h3>💰 الرسوم</h3><div>${esc(p.fees||'—')}</div>
+    <h3>🏢 الدائرة</h3><div>${esc(p.office||'—')}</div>
+    <div class="row" style="margin-top:10px">
+      <a class="btn sm alt" href="${esc(p.map_link||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((p.office||'')+' '+p.city))}" target="_blank" rel="noopener">📍 الموقع على الخريطة</a>
+      ${p.phone?`<a class="btn sm alt" href="tel:${esc(p.phone)}">📞 ${esc(p.phone)}</a>`:''}
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn sm alt" onclick="vote('${esc(id)}')">👍 المعلومة مفيدة (${p.helpful||0})</button>
+    <a class="btn sm alt" href="#/suggest" style="text-decoration:none;text-align:center">💬 اقترح تصحيحاً</a>
+  </div>`;
+  updCk(id);
+}
+function togCk(id,i,v){
+  const all=store.get('ck',{});all[id]=all[id]||[];all[id][i]=v;store.set('ck',all);
+  viewDetail(id);
+}
+function updCk(id){
+  const p=DATA.find(x=>String(x.id)===String(id));if(!p)return;
+  const c=(store.get('ck',{})[id]||[]).filter(Boolean).length,n=(p.docs||[]).length||1;
+  const e=$('#ckp');if(e)e.style.width=Math.round(c/n*100)+'%';
+  const t=$('#ckc');if(t)t.textContent=`(${c}/${p.docs.length})`;
+}
+async function vote(id){
+  const voted=store.get('votes',[]);
+  if(voted.includes(id)){toast('سجّلنا تقييمك من قبل 🙏');return}
+  const p=DATA.find(x=>String(x.id)===String(id));if(!p)return;
+  p.helpful=(p.helpful||0)+1;
+  if(sb){const {data}=await sb.from('procedures').select('helpful').eq('id',p.id).single();if(data){await sb.from('procedures').update({helpful:(data.helpful||0)+1}).eq('id',p.id)}}
+  voted.push(id);store.set('votes',voted);
+  toast('شكراً على تقييمك ❤️');viewDetail(id);
+}
+
+/* ---------- اقترح تصحيحاً ---------- */
+function viewSuggest(){
+  const opts=DATA.map(p=>`<option value="${esc(p.t)}">${esc(p.t)}</option>`).join('');
+  $('#app').innerHTML=`
+  <div class="card">
+    <h3>💬 اقترح تصحيحاً أو أضف معاملة</h3>
+    <p class="mut">مساعدتك تصنع الفرق: إذا غيّرت رسوم أو خطوات في دائرة، أخبرنا ونحدّثها للجميع</p>
+    <label>المعاملة</label>
+    <select id="sg-p"><option value="عام">أخرى / ملاحظة عامة</option>${opts}</select>
+    <label>اسمك (اختياري)</label>
+    <input id="sg-n" placeholder="مجهول also fine 😉">
+    <label>الملاحظة أو التصحيح</label>
+    <textarea id="sg-m" placeholder="مثال: رسم براءة الذمة صار كذا في مصلحة ضرائب طرابلس…"></textarea>
+    <button class="btn" onclick="sendSugg()">إرسال</button>
+  </div>`;
+}
+async function sendSugg(){
+  const t=$('#sg-p').value,n=$('#sg-n').value.trim(),m=$('#sg-m').value.trim();
+  if(!m){toast('اكتب الملاحظة أولاً');return}
+  if(sb){
+    const {error}=await sb.from('suggestions').insert({procedure_title:t,name:n,message:m});
+    if(error){toast('تعذّر الإرسال — تحقق من الاتصال');return}
+  }else{
+    const l=store.get('sug',[]);l.push({procedure_title:t,name:n,message:m,created_at:new Date().toISOString(),done:false});store.set('sug',l);
+  }
+  toast('وصلنا اقتراحك، شكراً! 🙏');go('#/');
+}
+
+/* ---------- عن التطبيق ---------- */
+function viewAbout(){
+  $('#app').innerHTML=`
+  <div class="card">
+    <h3>📋 وراقنا</h3>
+    <p>دليل مبسّط للمعاملات الحكومية في ليبيا: المستندات، الخطوات، الرسوم، وموقع الدائرة — كلها في مكان واحد.</p>
+    <p class="mut">المعلومات قد تتغير — كل معاملة مكتوب عليها تاريخ آخر تحديث، ويمكنك تقييمها أو اقتراح التصحيح من تبويب "اقترح".</p>
+    <p class="mut">نسخة أولى — المدينة الحالية: طرابلس. قريباً: بنغازي، مصراتة، الزاوية…</p>
+  </div>`;
+}
+
+/* ---------- لوحة الإدارة ---------- */
+function viewAdmin(){
+  if(sessionStorage.getItem('wa')!=='1'){
+    $('#app').innerHTML=`<div class="card"><h3>🔐 لوحة الإدارة</h3>
+    <label>كلمة السر</label><input type="password" id="pass">
+    <button class="btn" onclick="login()">دخول</button></div>`;
+    return;
+  }
+  $('#app').innerHTML=`
+  <div class="card">
+    <div class="row"><h3 style="margin:0">🛠️ لوحة الإدارة</h3><button class="btn sm alt" onclick="sessionStorage.removeItem('wa');viewAdmin()">خروج</button></div>
+    <div class="row" style="margin-top:10px">
+      <span>المعاملات: <b>${DATA.length}</b></span>
+      <span id="sugg-c">الاقتراحات: …</span>
+      <span>${sb?'🟢 متصل':'🟡 تجريبي'}</span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn sm" onclick="seedBtn()">⬆️ تحميل البيانات الأولية</button>
+      <button class="btn sm alt" onclick="exportJson()">⬇️ تصدير JSON</button>
+    </div>
+  </div>
+  <div class="card" id="sugg-list"><h3>💬 الاقتراحات الواردة</h3><p class="mut">جارٍ التحميل…</p></div>
+  <div class="card">
+    <h3>➕ إضافة / تعديل معاملة</h3>
+    <label>اسم المعاملة</label><input id="ap-t">
+    <label>التصنيف</label><select id="ap-c">${[...new Set(DATA.map(p=>p.c))].map(c=>`<option>${esc(c)}</option>`).join('')}<option>عام</option></select>
+    <label>المدينة</label><input id="ap-city" value="طرابلس">
+    <label>المستندات (سطر لكل مستند)</label><textarea id="ap-d" style="min-height:70px"></textarea>
+    <label>الخطوات (سطر لكل خطوة)</label><textarea id="ap-s" style="min-height:70px"></textarea>
+    <label>الرسوم</label><input id="ap-f" placeholder="مثال: 50 دينار (تحقق)">
+    <label>الدائرة</label><input id="ap-o">
+    <label>رقم الهاتف (اختياري)</label><input id="ap-ph">
+    <label>رابط الخرائط (اختياري)</label><input id="ap-m" placeholder="https://maps.google.com/...">
+    <label><input type="checkbox" id="ap-v" style="width:auto"> ✅ معلومات محققة ميدانياً</label>
+    <button class="btn" onclick="addProc()">حفظ المعاملة</button>
+    <p class="mut" style="margin-top:8px">التعديل: افتح المعاملة من الرئيسية، عدّل الحقول هنا والصق بياناتها بنفس الاسم والمدينة</p>
+  </div>`;
+  loadSuggList();
+}
+function login(){if($('#pass').value===ADMIN_PASS){sessionStorage.setItem('wa','1');viewAdmin()}else toast('كلمة السر غلط ❌')}
+async function loadSuggList(){
+  let list;
+  if(sb){const {data}=await sb.from('suggestions').select('*').order('created_at',{ascending:false});list=data||[]}
+  else list=store.get('sug',[]).slice().reverse();
+  $('#sugg-c').textContent='الاقتراحات: '+list.filter(x=>!x.done).length+' جديد';
+  $('#sugg-list').innerHTML='<h3>💬 الاقتراحات الواردة</h3>'+(list.length?`<table><tr><th>المعاملة</th><th>الملاحظة</th><th>الاسم</th><th></th></tr>${list.map(x=>`<tr style="${x.done?'opacity:.45':''}"><td>${esc(x.procedure_title||'عام')}</td><td>${esc(x.message)}</td><td>${esc(x.name||'—')}</td><td><button class="btn sm alt" onclick="suggDone(${x.id})">تم</button> <button class="btn sm alt" onclick="suggDel(${x.id})">حذف</button></td></tr>`).join('')}</table>`:'<p class="mut">لا اقتراحات بعد</p>');
+}
+async function seedBtn(){
+  if(!sb){toast('فعّل Supabase أولاً (SB_URL و SB_KEY)');return}
+  let n=0;
+  for(const p of SEED){
+    const {data}=await sb.from('procedures').select('id').eq('title',p.t).eq('city',p.city).limit(1);
+    if(data&&data.length)continue;
+    const {error}=await sb.from('procedures').insert({title:p.t,category:p.c,city:p.city,docs:p.d,steps:p.s,fees:p.f,office:p.o,phone:p.ph,map_link:p.m,verified:p.v,helpful:0});
+    if(!error)n++;
+  }
+  toast(n?`تم رفع ${n} معاملة ✅`:'البيانات موجودة أصلاً — لا شيء جديد');
+  boot();
+}
+function exportJson(){
+  const blob=new Blob([JSON.stringify(DATA,null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='procedures.json';a.click();
+  toast('تم تنزيل النسخة الاحتياطية ⬇️');
+}
+async function addProc(){
+  const t=$('#ap-t').value.trim();if(!t){toast('اكتب اسم المعاملة');return}
+  const item={title:t,category:$('#ap-c').value,city:$('#ap-city').value.trim()||'طرابلس',
+    docs:$('#ap-d').value.split('\n').map(x=>x.trim()).filter(Boolean),
+    steps:$('#ap-s').value.split('\n').map(x=>x.trim()).filter(Boolean),
+    fees:$('#ap-f').value.trim(),office:$('#ap-o').value.trim(),phone:$('#ap-ph').value.trim(),
+    map_link:$('#ap-m').value.trim(),verified:$('#ap-v').checked,verified_at:$('#ap-v').checked?new Date().toISOString().slice(0,10):null,helpful:0};
+  if(sb){
+    const {data}=await sb.from('procedures').select('id').eq('title',t).eq('city',item.city).limit(1);
+    if(data&&data.length){const {error}=await sb.from('procedures').update(item).eq('id',data[0].id);if(error){toast('خطأ في التحديث');return}toast('تم تحديث المعاملة ✅')}
+    else{const {error}=await sb.from('procedures').insert(item);if(error){toast('خطأ في الحفظ');return}toast('تمت الإضافة ✅')}
+    boot();
+  }else{
+    const i=DATA.findIndex(p=>p.title===t&&p.city===item.city);
+    if(i>-1)DATA[i]={...DATA[i],...item};else DATA.unshift({id:'x'+Date.now(),...item});
+    toast('حُفظت محلياً (وضع تجريبي) — فعّل Supabase للحفظ الدائم');
+  }
+}
+async function suggDone(id){
+  if(sb){await sb.from('suggestions').update({done:true}).eq('id',id)}
+  else{const l=store.get('sug',[]);const x=l.find(y=>y.id===id);if(x)x.done=true;store.set('sug',l)}
+  loadSuggList();toast('تمت الإشارة ✅');
+}
+async function suggDel(id){
+  if(sb){await sb.from('suggestions').delete().eq('id',id)}
+  else{store.set('sug',store.get('sug',[]).filter(y=>y.id!==id))}
+  loadSuggList();toast('حُذف');
+}
+
+boot();
+</script>
+</body>
+</html>
